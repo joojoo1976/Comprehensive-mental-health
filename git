@@ -1,0 +1,4 @@
+git init
+git add .
+git commit -m "Initial commit: Comprehensive mental health application"
+git remote add origin https://github.com/joojoo1976/Comprehensive-mental-health.git
