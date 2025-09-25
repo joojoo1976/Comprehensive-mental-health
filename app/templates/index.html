@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <h1>{{ _("welcome_message") }}</h1>
+        <p>{{ _("welcome_submessage") }}</p>
+        <a href="/register" class="btn">{{ _("get_started") }}</a>
+    </div>
+</div>
+
+<div class="features">
+    <div class="container">
+        <h2>{{ _("our_features") }}</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i class="fas fa-comments"></i>
+                <h3>{{ _("feature_1_title") }}</h3>
+                <p>{{ _("feature_1_description") }}</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h3>{{ _("feature_2_title") }}</h3>
+                <p>{{ _("feature_2_description") }}</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>{{ _("feature_3_title") }}</h3>
+                <p>{{ _("feature_3_description") }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="language-selector">
+    <div class="container">
+        <p>{{ _("select_language") }}:</p>
+        <div class="language-options">
+            {% for lang in supported_locales %}
+            <button onclick="setLanguage('{{ lang }}')" {% if lang == locale %}class="active"{% endif %}>
+                {{ language_names[lang] }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.language-selector {
+    background-color: #f9f9f9;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.language-options {
+    margin-top: 1rem;
+}
+
+.language-options button {
+    background: none;
+    border: 1px solid #3498db;
+    color: #3498db;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.language-options button:hover,
+.language-options button.active {
+    background-color: #3498db;
+    color: white;
+}
+</style>
+{% endblock %}
