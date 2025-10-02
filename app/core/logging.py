@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from app.config import settings
 
+
 def setup_logging():
     """إعداد نظام التسجيل للتطبيق"""
     # إنشاء مجلد السجلات إذا لم يكن موجودًا

@@ -8,11 +8,12 @@ from app.core.database import get_db
 from app.core.default_translations import default_translations
 from app.core.i18n import translator, i18n_settings
 from app.core.translation_loader import translation_loader
-from app.models.user import User
+
 from app.schemas.user import UserInDB
 from app.core.security import verify_token
 
 router = APIRouter()
+
 
 @router.get("/load")
 async def load_default_translations(
@@ -38,6 +39,7 @@ async def load_default_translations(
         "message": "Default translations loaded successfully",
         "languages_loaded": len(default_translations)
     }
+
 
 @router.get("/get")
 async def get_default_translations(
@@ -69,6 +71,7 @@ async def get_default_translations(
         "translations": translations
     }
 
+
 @router.get("/languages")
 async def get_supported_languages(
     current_user: UserInDB = Depends(verify_token)
@@ -89,7 +92,8 @@ async def get_supported_languages(
         languages[lang_code] = {
             "name": default_translations.get(lang_code, {}).get("language_name", lang_code),
             "native_name": default_translations.get(lang_code, {}).get("language_native_name", lang_code),
-            "rtl": lang_code in ["ar", "he", "fa", "ur", "ps", "yi"],  # اللغات التي تكتب من اليمين لليسار
+            # اللغات التي تكتب من اليمين لليسار
+            "rtl": lang_code in ["ar", "he", "fa", "ur", "ps", "yi"],
             "loaded": lang_code in default_translations
         }
 
@@ -98,6 +102,7 @@ async def get_supported_languages(
         "total_languages": len(i18n_settings.supported_locales),
         "loaded_languages": len(default_translations)
     }
+
 
 @router.post("/update")
 async def update_default_translations(
@@ -135,6 +140,7 @@ async def update_default_translations(
         "language": lang_code
     }
 
+
 @router.get("/status")
 async def get_default_translations_status(
     current_user: UserInDB = Depends(verify_token)
@@ -164,4 +170,6 @@ async def get_default_translations_status(
         "total_languages": len(i18n_settings.supported_locales),
         "loaded_languages": len(default_translations),
         "completion_percentage": round((len(default_translations) / len(i18n_settings.supported_locales)) * 100, 2)
+    }
+) * 100, 2)
     }

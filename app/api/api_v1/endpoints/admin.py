@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 import re
 from pathlib import Path
@@ -12,6 +12,7 @@ from app.core.security import get_current_user, PermissionChecker, invalidate_us
 router = APIRouter()
 
 # --- Permissions Endpoints ---
+
 
 @router.post(
     "/permissions",
@@ -28,10 +29,13 @@ def create_permission(
     إنشاء صلاحية جديدة في النظام.
     - **name**: اسم الصلاحية (مثال: `users:read`).
     """
-    db_permission = crud.crud_auth.get_permission_by_name(db, name=permission_in.name)
+    db_permission = crud.crud_auth.get_permission_by_name(
+        db, name=permission_in.name)
     if db_permission:
-        raise HTTPException(status_code=400, detail="Permission already exists.")
+        raise HTTPException(
+            status_code=400, detail="Permission already exists.")
     return crud.crud_auth.create_permission(db=db, permission=permission_in)
+
 
 @router.get(
     "/permissions",
@@ -52,6 +56,7 @@ def read_permissions(
 
 # --- Roles Endpoints ---
 
+
 @router.post(
     "/roles",
     response_model=schemas.auth.Role,
@@ -71,6 +76,7 @@ def create_role(
         raise HTTPException(status_code=400, detail="Role already exists.")
     return crud.crud_auth.create_role(db=db, role=role_in)
 
+
 @router.get(
     "/roles",
     response_model=List[schemas.auth.Role],
@@ -87,6 +93,7 @@ def read_roles(
     """
     roles = crud.crud_auth.get_roles(db, skip=skip, limit=limit)
     return roles
+
 
 @router.post(
     "/roles/{role_id}/permissions/{permission_id}",
@@ -108,12 +115,14 @@ def add_permission_to_role(
     permission = crud.crud_auth.get_permission(db, permission_id=permission_id)
     if not permission:
         raise HTTPException(status_code=404, detail="Permission not found")
-    
-    updated_role = crud.crud_auth.add_permission_to_role(db, role=role, permission=permission)
+
+    updated_role = crud.crud_auth.add_permission_to_role(
+        db, role=role, permission=permission)
 
     return updated_role
 
 # --- Audit Log Endpoint ---
+
 
 LOG_FILE_PATH = Path("logs/app.log")
 AUDIT_LOG_REGEX = re.compile(
@@ -123,6 +132,7 @@ AUDIT_LOG_REGEX = re.compile(
     r"from IP (?P<ip_address>[\d\.:a-fA-F]+) tried to access '(?P<method>\w+) (?P<path>.*?)'. "
     r"Missing permissions: (?P<missing_permissions>.*)$"
 )
+
 
 @router.get(
     "/audit-logs",
@@ -158,12 +168,15 @@ def read_audit_logs(limit: int = 100):
                     match = AUDIT_LOG_REGEX.match(line.strip())
                     if match:
                         log_data = match.groupdict()
-                        audit_logs.append(schemas.auth.AuditLogEntry(**log_data))
+                        audit_logs.append(
+                            schemas.auth.AuditLogEntry(**log_data))
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Could not read or parse log file: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Could not read or parse log file: {e}")
 
     return audit_logs
+
 
 @router.delete(
     "/roles/{role_id}/permissions/{permission_id}",
@@ -186,6 +199,7 @@ def remove_permission_from_role(
     if not permission:
         raise HTTPException(status_code=404, detail="Permission not found")
 
-    updated_role = crud.crud_auth.remove_permission_from_role(db, role=role, permission=permission)
+    updated_role = crud.crud_auth.remove_permission_from_role(
+        db, role=role, permission=permission)
 
     return updated_role

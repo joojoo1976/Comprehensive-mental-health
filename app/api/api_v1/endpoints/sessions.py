@@ -10,6 +10,7 @@ from app.core.security import get_current_user
 
 router = APIRouter()
 
+
 @router.get("/", response_model=List[schemas.Session])
 def read_sessions(
     skip: int = 0,
@@ -20,8 +21,10 @@ def read_sessions(
     """
     الحصول على قائمة جلسات المستخدم
     """
-    sessions = crud.get_user_sessions(db, user_id=current_user.id, skip=skip, limit=limit)
+    sessions = crud.get_user_sessions(
+        db, user_id=current_user.id, skip=skip, limit=limit)
     return sessions
+
 
 @router.get("/{session_id}", response_model=schemas.Session)
 def read_session(
@@ -40,6 +43,7 @@ def read_session(
         )
     return session
 
+
 @router.post("/", response_model=schemas.Session)
 def create_session(
     *,
@@ -50,8 +54,10 @@ def create_session(
     """
     إنشاء جلسة جديدة
     """
-    session = crud.create_session(db, user_id=current_user.id, session_in=session_in)
+    session = crud.create_session(
+        db, user_id=current_user.id, session_in=session_in)
     return session
+
 
 @router.post("/{session_id}/join", response_model=schemas.Session)
 def join_session(
@@ -62,13 +68,15 @@ def join_session(
     """
     الانضمام إلى جلسة موجودة
     """
-    session = crud.join_session(db, session_id=session_id, user_id=current_user.id)
+    session = crud.join_session(
+        db, session_id=session_id, user_id=current_user.id)
     if not session:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="الجلسة غير موجودة أو غير متاحة"
         )
     return session
+
 
 @router.post("/{session_id}/leave")
 def leave_session(
@@ -79,13 +87,15 @@ def leave_session(
     """
     المغادرة من جلسة
     """
-    success = crud.leave_session(db, session_id=session_id, user_id=current_user.id)
+    success = crud.leave_session(
+        db, session_id=session_id, user_id=current_user.id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="لم تكن في هذه الجلسة أو لم تتمكن من المغادرة"
         )
     return {"msg": "تمت المغادرة من الجلسة بنجاح"}
+
 
 @router.post("/{session_id}/feedback", response_model=schemas.SessionFeedback)
 def create_session_feedback(
@@ -105,8 +115,10 @@ def create_session_feedback(
             detail="غير مصرح لك بإضافة تغذية راجعة لهذه الجلسة"
         )
 
-    feedback = crud.create_session_feedback(db, session_id=session_id, feedback_in=feedback_in)
+    feedback = crud.create_session_feedback(
+        db, session_id=session_id, feedback_in=feedback_in)
     return feedback
+
 
 @router.get("/{session_id}/recording")
 def get_session_recording(
@@ -126,6 +138,7 @@ def get_session_recording(
 
     # هنا يتم إرجاع رابط التسجيل أو التسجيل نفسه
     return {"recording_url": f"/api/v1/sessions/{session_id}/recording.mp4"}
+
 
 @router.get("/{session_id}/analysis")
 def get_session_analysis(
@@ -150,8 +163,10 @@ def get_session_analysis(
             "dominant_emotion": "القلق",
             "emotion_trend": "تحسن",
             "key_moments": [
-                {"time": "00:05:23", "emotion": "حزن", "description": "ذكر المستخدم بتجربة سابقة"},
-                {"time": "00:12:45", "emotion": "توتر", "description": "مناقشة موضوع محفوف بالمخاطر"}
+                {"time": "00:05:23", "emotion": "حزن",
+                    "description": "ذكر المستخدم بتجربة سابقة"},
+                {"time": "00:12:45", "emotion": "توتر",
+                    "description": "مناقشة موضوع محفوف بالمخاطر"}
             ]
         },
         "voice_analysis": {

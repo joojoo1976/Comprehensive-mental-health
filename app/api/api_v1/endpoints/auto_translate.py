@@ -10,11 +10,12 @@ from app.core.translation_loader import translation_loader
 from app.core.auto_translator import auto_translator
 from app.core.consent import consent_manager
 from app.core.geolocation import geolocation_service
-from app.models.user import User
+
 from app.schemas.user import UserInDB
 from app.core.security import verify_token
 
 router = APIRouter()
+
 
 @router.post("/content")
 async def translate_content(
@@ -49,7 +50,8 @@ async def translate_content(
         )
 
     # ترجمة المحتوى
-    translated_content = auto_translator.translate_content(content, target_language, source_language)
+    translated_content = auto_translator.translate_content(
+        content, target_language, source_language)
 
     if translated_content is None:
         raise HTTPException(
@@ -63,6 +65,7 @@ async def translate_content(
         "source_language": source_language,
         "target_language": target_language
     }
+
 
 @router.post("/batch")
 async def batch_translate(
@@ -97,7 +100,8 @@ async def batch_translate(
         )
 
     # ترجمة النصوص
-    translated_texts = auto_translator.batch_translate(texts, target_language, source_language)
+    translated_texts = auto_translator.batch_translate(
+        texts, target_language, source_language)
 
     # التحقق من نجاح الترجمة
     if all(t is None for t in translated_texts):
@@ -114,6 +118,7 @@ async def batch_translate(
         "success_count": sum(1 for t in translated_texts if t is not None),
         "failure_count": sum(1 for t in translated_texts if t is None)
     }
+
 
 @router.get("/languages")
 async def get_available_translation_languages(
@@ -135,6 +140,7 @@ async def get_available_translation_languages(
         "languages": available_languages,
         "count": len(available_languages)
     }
+
 
 @router.post("/suggest")
 async def suggest_translation(
@@ -164,7 +170,8 @@ async def suggest_translation(
     suggested_languages = []
 
     # إضافة اللغات الشائعة
-    common_languages = ["en", "es", "fr", "de", "zh", "ar", "ru", "ja", "ko", "pt"]
+    common_languages = ["en", "es", "fr", "de",
+                        "zh", "ar", "ru", "ja", "ko", "pt"]
 
     for lang in common_languages:
         if lang != detected_language and lang in i18n_settings.supported_locales:
@@ -181,6 +188,7 @@ async def suggest_translation(
         "detected_language_name": translation_loader.get_translation(f"language_name.{detected_language}", detected_language),
         "suggested_languages": suggested_languages
     }
+
 
 @router.post("/content-type")
 async def translate_content_type(
@@ -227,7 +235,8 @@ async def translate_content_type(
     }
 
     # ترجمة المحتوى
-    translated_content = auto_translator.translate_content(content, target_language, source_language)
+    translated_content = auto_translator.translate_content(
+        content, target_language, source_language)
 
     if translated_content is None:
         raise HTTPException(
@@ -243,6 +252,7 @@ async def translate_content_type(
         "source_language": source_language,
         "target_language": target_language
     }
+
 
 @router.get("/progress")
 async def get_translation_progress(
@@ -281,3 +291,4 @@ async def get_translation_progress(
     }
 
     return progress
+   return progress

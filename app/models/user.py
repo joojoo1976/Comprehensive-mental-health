@@ -7,10 +7,12 @@ import enum
 
 from app.core.database import Base
 
+
 class UserRole(enum.Enum):
     USER = "user"
     THERAPIST = "therapist"
     ADMIN = "admin"
+
 
 class User(Base):
     __tablename__ = "users"
@@ -20,7 +22,8 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, index=True)
     is_active = Column(Boolean, default=True)
-    role = Column(Enum(UserRole), default=UserRole.USER)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)
+    role = relationship("Role", back_populates="users")
     email_verified = Column(Boolean, default=False)
     verification_token = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -28,17 +31,22 @@ class User(Base):
 
     # العلاقات
     profile = relationship("UserProfile", back_populates="user", uselist=False)
-    preferences = relationship("UserPreferences", back_populates="user", uselist=False)
+    preferences = relationship(
+        "UserPreferences", back_populates="user", uselist=False)
     sessions = relationship("Session", back_populates="user")
     mood_entries = relationship("MoodEntry", back_populates="user")
     sleep_entries = relationship("SleepEntry", back_populates="user")
     activity_entries = relationship("ActivityEntry", back_populates="user")
     bookmarks = relationship("ArticleBookmark", back_populates="user")
-    program_enrollments = relationship("ProgramEnrollment", back_populates="user")
+    program_enrollments = relationship(
+        "ProgramEnrollment", back_populates="user")
     group_memberships = relationship("GroupMembership", back_populates="user")
-    digital_biomarkers = relationship("DigitalBiomarker", back_populates="user")
-    life_inflection_points = relationship("LifeInflectionPoint", back_populates="user")
+    digital_biomarkers = relationship(
+        "DigitalBiomarker", back_populates="user")
+    life_inflection_points = relationship(
+        "LifeInflectionPoint", back_populates="user")
     session_feedbacks = relationship("SessionFeedback", back_populates="user")
+
 
 class UserProfile(Base):
     __tablename__ = "user_profiles"
@@ -58,6 +66,7 @@ class UserProfile(Base):
 
     # العلاقات
     user = relationship("User", back_populates="profile")
+
 
 class UserPreferences(Base):
     __tablename__ = "user_preferences"

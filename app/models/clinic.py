@@ -7,6 +7,7 @@ from sqlalchemy.sql import func
 import enum
 from app.core.database import Base
 
+
 class ClinicType(enum.Enum):
     MENTAL_HEALTH_CENTER = "mental_health_center"
     PSYCHIATRY_CLINIC = "psychiatry_clinic"
@@ -15,10 +16,12 @@ class ClinicType(enum.Enum):
     COMMUNITY_HEALTH_CENTER = "community_health_center"
     SPECIALIZED_CENTER = "specialized_center"
 
+
 class ClinicStatus(enum.Enum):
     ACTIVE = "active"
     INACTIVE = "inactive"
     UNDER_MAINTENANCE = "under_maintenance"
+
 
 class Clinic(Base):
     __tablename__ = "clinics"
@@ -81,6 +84,7 @@ class Clinic(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+
 class Doctor(Base):
     __tablename__ = "doctors"
 
@@ -131,6 +135,7 @@ class Doctor(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+
 class ClinicReview(Base):
     __tablename__ = "clinic_reviews"
 
@@ -146,6 +151,7 @@ class ClinicReview(Base):
     # التسجيل
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
 
 class DoctorReview(Base):
     __tablename__ = "doctor_reviews"
@@ -163,6 +169,7 @@ class DoctorReview(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+
 class ClinicFavorite(Base):
     __tablename__ = "clinic_favorites"
 
@@ -171,6 +178,7 @@ class ClinicFavorite(Base):
     clinic_id = Column(Integer, ForeignKey("clinics.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+
 class DoctorFavorite(Base):
     __tablename__ = "doctor_favorites"
 
@@ -178,6 +186,7 @@ class DoctorFavorite(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     doctor_id = Column(Integer, ForeignKey("doctors.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 
 class ClinicService(Base):
     __tablename__ = "clinic_services"
@@ -200,6 +209,7 @@ class ClinicService(Base):
     # التسجيل
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
 
 # العلاقات
 Clinic.doctors = relationship("Doctor", back_populates="clinic")

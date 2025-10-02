@@ -13,8 +13,10 @@ client = TestClient(app)
 
 # --- بيانات وهمية للاختبار ---
 
-mock_perm_audit_read = Permission(id=1, name="audit:read", description="Read audit logs")
-mock_perm_roles_read = Permission(id=2, name="roles:read", description="Read roles")
+mock_perm_audit_read = Permission(
+    id=1, name="audit:read", description="Read audit logs")
+mock_perm_roles_read = Permission(
+    id=2, name="roles:read", description="Read roles")
 
 mock_role_admin = Role(
     id=1,
@@ -54,20 +56,24 @@ mock_regular_user = UserInDB(
 
 # --- إعدادات الاختبار (Fixtures) ---
 
+
 @pytest.fixture
 def db_session(mocker) -> Session:
     """إنشاء جلسة قاعدة بيانات وهمية."""
     return mocker.MagicMock(spec=Session)
 
+
 def override_get_db():
     """تجاوز تبعية قاعدة البيانات."""
     yield MagicMock(spec=Session)
+
 
 def setup_user_dependency(user: UserInDB):
     """إعداد تبعية المستخدم الحالي."""
     def override_get_current_user():
         return user
     app.dependency_overrides[get_current_user] = override_get_current_user
+
 
 @pytest.fixture(autouse=True)
 def setup_default_dependencies():
@@ -78,6 +84,7 @@ def setup_default_dependencies():
     app.dependency_overrides = original_overrides
 
 # --- حالات الاختبار ---
+
 
 def test_read_audit_logs_success(mocker):
     """
@@ -90,7 +97,7 @@ def test_read_audit_logs_success(mocker):
         "2023-10-27 10:05:15,456 - app.core.security - WARNING - ACCESS DENIED: User 'test@user.com' (ID: 2) with role 'user' from IP 127.0.0.1 tried to access 'POST /api/v1/admin/roles'. Missing permissions: roles:create\n"
         "2023-10-27 10:10:00,789 - app.main - INFO - Request processed\n"
     )
-    
+
     mocker.patch("pathlib.Path.exists", return_value=True)
     mocker.patch("builtins.open", mock_open(read_data=log_content))
 
@@ -103,6 +110,7 @@ def test_read_audit_logs_success(mocker):
     assert data[0]["path"] == "/api/v1/admin/roles"
     assert data[0]["missing_permissions"] == "roles:create"
 
+
 def test_read_audit_logs_permission_denied(mocker):
     """
     اختبار منع الوصول لمستخدم عادي يحاول قراءة سجلات التدقيق.
@@ -113,6 +121,7 @@ def test_read_audit_logs_permission_denied(mocker):
 
     assert response.status_code == 403
     assert "don't have permission" in response.json()["detail"]
+
 
 def test_read_audit_logs_no_file(mocker):
     """
@@ -127,6 +136,7 @@ def test_read_audit_logs_no_file(mocker):
     assert response.status_code == 200
     assert response.json() == []
 
+
 def test_read_audit_logs_empty_or_no_match(mocker):
     """
     اختبار الحالة التي يكون فيها ملف السجل فارغًا أو لا يحتوي على إدخالات مطابقة.
@@ -137,7 +147,7 @@ def test_read_audit_logs_empty_or_no_match(mocker):
         "2023-10-27 10:00:00,123 - app.core.security - INFO - Some other log\n"
         "2023-10-27 10:10:00,789 - app.main - INFO - Request processed\n"
     )
-    
+
     mocker.patch("pathlib.Path.exists", return_value=True)
     mocker.patch("builtins.open", mock_open(read_data=log_content))
 

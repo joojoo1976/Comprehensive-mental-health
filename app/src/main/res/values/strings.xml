@@ -1,3 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
 <resources>
-    <string name="app_name">Comprehensive mental health</string>
+    <string name="app_name">Trackr</string>
+
+    <!--Task Item -->
+    <string name="user">Owner: %s</string>
+    <string name="tag_label">Tag: %s</string>
+    <string name="due_date_with_value">Due date: %s</string>
+    <string name="creation_date_with_value">Creation date: %s</string>
+
+    <string name="starred">Starred</string>
+    <string name="unstarred">Unstarred</string>
+    <string name="star">Star</string>
+    <string name="unstar">Unstar</string>
+    <string name="edit_task">Edit task</string>
+    <string name="new_task">New task</string>
+    <string name="change">change</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
+
+    <!-- Custom accessibility action strings -->
+    <string name="explore_details">Explore details</string>
+    <string name="toggle">Toggle</string>
+    <string name="move_to_top">Move to top</string>
+    <string name="move_to_bottom">Move to bottom</string>
+    <string name="move_up_one">Move up one</string>
+    <string name="move_down_one">Move down one</string>
+
+    <!-- Snackbar strings -->
+    <string name="task_archived">Task archived</string>
+    <string name="task_position_changed">Task position changed</string>
+    <string name="undo">Undo</string>
+
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="status">Status</string>
+    <string name="creator">Creator</string>
+    <string name="owner_with_value">Owner: %s</string>
+    <string name="creator_with_value">Creator: %s</string>
+    <string name="due_at">Due date</string>
+    <string name="created_at">Creation date</string>
+    <string name="tags">Tags</string>
+    <string name="add_tags">Add tags</string>
+
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+
+    <string name="missing_title_error">Title Required</string>
+    <string name="discard_confirmation">Discard changes?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep editing</string>
+
+    <!-- Archive strings -->
+    <string name="unarchive">Unarchive</string>
+    <string name="close">Close</string>
+    <plurals name="tasks_unarchived">
+        <item quantity="one">1 task unarchived</item>
+        <item quantity="other">%s tasks unarchived</item>
+    </plurals>
+
+    <!-- Settings -->
+    <string name="dark_mode_title">Dark Mode</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="system_default">System Default</string>
+
+    <string name="dark_mode_key" translatable="false">darkMode</string>
+    <string name="enabled_value" translatable="false">enabled</string>
+    <string name="disabled_value" translatable="false">disabled</string>
+    <string name="system_default_value" translatable="false">default</string>
 </resources>

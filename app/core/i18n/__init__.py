@@ -8,6 +8,8 @@ from .settings import I18nSettings
 i18n_settings = I18nSettings()
 
 # دالة مساعدة للحصول على الترجمة
+
+
 def _(key: str, locale: str = None) -> str:
     """
     دالة مساعدة للحصول على الترجمة

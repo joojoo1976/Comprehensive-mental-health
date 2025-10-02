@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from app.models.session import SessionType, SessionStatus
 
 # Base schemas
+
+
 class SessionBase(BaseModel):
     session_type: SessionType
     title: Optional[str] = None
@@ -14,8 +16,10 @@ class SessionBase(BaseModel):
     scheduled_time: datetime
     duration: int  # بالدقائق
 
+
 class SessionCreate(SessionBase):
     therapist_id: Optional[int] = None
+
 
 class SessionUpdate(BaseModel):
     status: Optional[SessionStatus] = None
@@ -23,6 +27,7 @@ class SessionUpdate(BaseModel):
     description: Optional[str] = None
     scheduled_time: Optional[datetime] = None
     duration: Optional[int] = None
+
 
 class SessionInDBBase(SessionBase):
     id: int
@@ -37,15 +42,19 @@ class SessionInDBBase(SessionBase):
     class Config:
         orm_mode = True
 
+
 class Session(SessionInDBBase):
     pass
+
 
 class SessionParticipantBase(BaseModel):
     session_id: int
     user_id: int
 
+
 class SessionParticipantCreate(SessionParticipantBase):
     pass
+
 
 class SessionParticipantInDBBase(SessionParticipantBase):
     id: int
@@ -55,16 +64,20 @@ class SessionParticipantInDBBase(SessionParticipantBase):
     class Config:
         orm_mode = True
 
+
 class SessionParticipant(SessionParticipantInDBBase):
     pass
+
 
 class SessionFeedbackBase(BaseModel):
     session_id: int
     rating: int  # 1-5
     comment: Optional[str] = None
 
+
 class SessionFeedbackCreate(SessionFeedbackBase):
     pass
+
 
 class SessionFeedbackInDBBase(SessionFeedbackBase):
     id: int
@@ -74,8 +87,10 @@ class SessionFeedbackInDBBase(SessionFeedbackBase):
     class Config:
         orm_mode = True
 
+
 class SessionFeedback(SessionFeedbackInDBBase):
     pass
+
 
 class SessionAnalysisBase(BaseModel):
     session_id: int
@@ -85,8 +100,10 @@ class SessionAnalysisBase(BaseModel):
     summary: Optional[str] = None
     recommendations: Optional[str] = None  # JSON
 
+
 class SessionAnalysisCreate(SessionAnalysisBase):
     pass
+
 
 class SessionAnalysisInDBBase(SessionAnalysisBase):
     id: int
@@ -94,6 +111,7 @@ class SessionAnalysisInDBBase(SessionAnalysisBase):
 
     class Config:
         orm_mode = True
+
 
 class SessionAnalysis(SessionAnalysisInDBBase):
     pass

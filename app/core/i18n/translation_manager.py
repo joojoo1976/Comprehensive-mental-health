@@ -14,6 +14,7 @@ i18n_settings = I18nSettings()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 LOCALES_DIR = BASE_DIR / "locales"
 
+
 class TranslationManager:
     """مدير الترجمة للتعامل مع اللغات المختلفة"""
 
@@ -78,7 +79,8 @@ class TranslationManager:
                 with open(translation_file, 'r', encoding='utf-8') as f:
                     self.translations[lang_code] = json.load(f)
             except json.JSONDecodeError as e:
-                print(f"Error loading translation file {translation_file}: {e}")
+                print(
+                    f"Error loading translation file {translation_file}: {e}")
                 self.translations[lang_code] = {}
         else:
             # إذا لم يوجد ملف ترجمة، قم بإنشاء ملف فارغ
@@ -91,7 +93,8 @@ class TranslationManager:
 
         try:
             with open(translation_file, 'w', encoding='utf-8') as f:
-                json.dump(self.translations.get(lang_code, {}), f, ensure_ascii=False, indent=2)
+                json.dump(self.translations.get(lang_code, {}),
+                          f, ensure_ascii=False, indent=2)
             return True
         except (IOError, TypeError) as e:
             print(f"Error saving translation file {translation_file}: {e}")
@@ -106,11 +109,13 @@ class TranslationManager:
             lang = i18n_settings.default_locale
 
         # البحث عن الترجمة
-        translation = self._get_nested_value(self.translations.get(lang, {}), key.split('.'))
+        translation = self._get_nested_value(
+            self.translations.get(lang, {}), key.split('.'))
 
         # إذا لم يتم العثور على الترجمة، استخدم اللغة الافتراضية
         if translation is None:
-            translation = self._get_nested_value(self.translations.get(i18n_settings.default_locale, {}), key)
+            translation = self._get_nested_value(
+                self.translations.get(i18n_settings.default_locale, {}), key)
 
         # إذا لم يتم العثور على الترجمة في اللغة الافتراضية، أعد المفتاح
         return translation if translation is not None else key
@@ -236,21 +241,22 @@ class TranslationManager:
 
     def get_available_translations(self) -> Dict[str, str]:
         """الحصول على قائمة اللغات المتاحة مع أسمائها"""
-            "ak": "Akan",
         available_langs = {}
         # المرور على جميع اللغات المدعومة
         for lang_code in i18n_settings.supported_locales:
             # الحصول على اسم اللغة من ملف الترجمة الخاص بها
             # على سبيل المثال، للحصول على اسم اللغة العربية، نبحث عن مفتاح "language_native_name.ar" في ملف "ar.json"
-            lang_name = self.get_translation(f"language_native_name.{lang_code}", lang_code=lang_code)
-            
+            lang_name = self.get_translation(
+                f"language_native_name.{lang_code}", lang_code=lang_code)
+
             # إذا لم يتم العثور على الترجمة، استخدم رمز اللغة كقيمة افتراضية
             if lang_name == f"language_native_name.{lang_code}":
                 lang_name = lang_code
-            
+
             available_langs[lang_code] = lang_name
-        
+
         return available_langs
+
 
 # إنشاء مثيل من مدير الترجمة
 translator = TranslationManager()

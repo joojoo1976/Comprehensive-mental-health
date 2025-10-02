@@ -11,6 +11,7 @@ from app.core.i18n import translator
 
 logger = logging.getLogger(__name__)
 
+
 class GeolocationService:
     """خدمة تحديد الموقع الجغرافي بناءً على عنوان IP"""
 
@@ -32,7 +33,7 @@ class GeolocationService:
             "name": "ip-api.com",
             "url": "http://ip-api.com/json/{ip_address}",
             "parser": lambda data: {
-                "country": data.get("countryCode"), # لاحظ أن اسم الحقل مختلف
+                "country": data.get("countryCode"),  # لاحظ أن اسم الحقل مختلف
                 "timezone": data.get("timezone"),
             } if data.get("status") == "success" else None
         }
@@ -60,7 +61,8 @@ class GeolocationService:
         try:
             ip = ipaddress.ip_address(ip_address)
             if ip.is_private or ip.is_loopback or ip.is_reserved:
-                logger.debug(f"Skipping geolocation for private/reserved IP: {ip_address}")
+                logger.debug(
+                    f"Skipping geolocation for private/reserved IP: {ip_address}")
                 return None
         except ValueError:
             logger.warning(f"Invalid IP address for geolocation: {ip_address}")
@@ -82,17 +84,20 @@ class GeolocationService:
                 parsed_data = provider["parser"](raw_data)
 
                 if parsed_data and parsed_data.get("country"):
-                    logger.debug(f"Geolocation data for {ip_address} retrieved from {provider['name']}")
+                    logger.debug(
+                        f"Geolocation data for {ip_address} retrieved from {provider['name']}")
                     # تخزين النتائج الموحدة في ذاكرة التخزين المؤقت
                     self.cache[ip_address] = parsed_data
                     return parsed_data
 
             except requests.exceptions.RequestException as e:
                 # في حالة حدوث خطأ في الشبكة أو خطأ HTTP، انتقل إلى المزود التالي
-                logger.warning(f"Geolocation provider {provider['name']} failed for IP {ip_address}: {e}")
+                logger.warning(
+                    f"Geolocation provider {provider['name']} failed for IP {ip_address}: {e}")
                 continue
-            except (ValueError, TypeError) as e: # JSONDecodeError or parsing error
-                logger.warning(f"Failed to parse response from {provider['name']} for IP {ip_address}: {e}")
+            except (ValueError, TypeError) as e:  # JSONDecodeError or parsing error
+                logger.warning(
+                    f"Failed to parse response from {provider['name']} for IP {ip_address}: {e}")
                 continue
 
         logger.error(f"All geolocation providers failed for IP {ip_address}")
@@ -128,8 +133,8 @@ class GeolocationService:
             country_code = location["country"]
             # الحصول على اللغة بناءً على رمز الدولة
             return translator.get_locale_by_region(country_code)
-        
-        return translator.current_locale # العودة إلى اللغة الحالية أو الافتراضية
+
+        return translator.current_locale  # العودة إلى اللغة الحالية أو الافتراضية
 
     def get_client_ip(self, request: Request) -> str:
         """
@@ -158,6 +163,7 @@ class GeolocationService:
             ip = "127.0.0.1"
 
         return ip
+
 
 # إنشاء مثيل من خدمة تحديد الموقع الجغرافي
 geolocation_service = GeolocationService()

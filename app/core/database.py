@@ -17,6 +17,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # تبعية للوصول إلى جلسة قاعدة البيانات
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -24,5 +26,12 @@ def get_db():
     finally:
         db.close()
 
+
 # إعداد مستمعي الأحداث لإبطال ذاكرة التخزين المؤقت
 setup_cache_invalidation_listeners(SessionLocal)
+
+
+def create_tables():
+    """Helper to create all tables. Use in development only when
+    `settings.auto_create_db` is True."""
+    Base.metadata.create_all(bind=engine)

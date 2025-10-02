@@ -2,7 +2,7 @@
 # نقاط نهاية WebSocket للترجمة التلقائية في الوقت الفعلي
 
 from typing import Dict, List, Optional, Any
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, status
 from app.core.i18n import translator, i18n_settings
 from app.core.auto_translator import auto_translator
 from app.core.consent import consent_manager
@@ -12,6 +12,7 @@ from app.schemas.user import UserInDB
 from app.core.security import get_current_user, verify_token
 
 router = APIRouter()
+
 
 class ConnectionManager:
     """مدير اتصالات WebSocket"""
@@ -47,8 +48,10 @@ class ConnectionManager:
             for connection in user_connections:
                 await connection.send_text(message)
 
+
 # إنشاء مثيل من مدير الاتصالات
 manager = ConnectionManager()
+
 
 @router.websocket("/translate")
 async def websocket_translate(websocket: WebSocket, current_user: UserInDB = Depends(get_current_user)):
@@ -95,7 +98,8 @@ async def websocket_translate(websocket: WebSocket, current_user: UserInDB = Dep
                     continue
 
                 # ترجمة النص
-                translated_text = auto_translator.translate_text(text, target_language, source_language)
+                translated_text = auto_translator.translate_text(
+                    text, target_language, source_language)
 
                 # إرسال النتيجة
                 if translated_text:
@@ -124,6 +128,7 @@ async def websocket_translate(websocket: WebSocket, current_user: UserInDB = Dep
 
     except WebSocketDisconnect:
         manager.disconnect(websocket, current_user.id)
+
 
 @router.websocket("/detect-language")
 async def websocket_detect_language(websocket: WebSocket, token: str):

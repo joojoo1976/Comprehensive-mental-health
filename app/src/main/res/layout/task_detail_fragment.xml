@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.android.trackr.ui.detail.TaskDetailViewModel" />
+
+        <variable
+            name="clock"
+            type="java.time.Clock" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/task_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:paddingTopSystemBars="@{true}"
+        tools:context=".ui.detail.TaskDetailFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:paddingLeftSystemBars="@{true}"
+            app:paddingRightSystemBars="@{true}"
+            android:paddingEnd="@dimen/pane_margin"
+            android:paddingStart="@dimen/pane_margin">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/task_detail"
+                app:navigationContentDescription="@string/back"
+                tools:navigationIcon="@drawable/ic_chevron_start" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/pane_margin"
+            android:layout_marginRight="@dimen/pane_margin"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:cardCornerRadius="@dimen/card_radius"
+            app:marginLeftSystemBars="@{true}"
+            app:marginRightSystemBars="@{true}"
+            android:layout_marginStart="@dimen/pane_margin"
+            android:layout_marginEnd="@dimen/pane_margin">
+
+            <ScrollView
+                android:id="@+id/scrolling_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                app:paddingBottomSystemBars="@{true}">
+
+                <LinearLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Star / Title -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:orientation="horizontal">
+
+                        <com.example.android.trackr.ui.widget.StarButton
+                            android:id="@+id/star"
+                            android:layout_width="@dimen/home_task_star_size"
+                            android:layout_height="@dimen/home_task_star_size"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            android:checked="@{viewModel.starred}"
+                            android:gravity="center"
+                            app:clickActionLabel="@{@string/toggle}"
+                            app:ensureMinTouchArea="@{@dimen/min_touch_target}" />
+
+                        <TextView
+                            style="@style/Widget.Trackr.TextView.Label.Title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_weight="1"
+                            android:text="@{viewModel.detail.title}"
+                            tools:text="Calendar design" />
+
+                    </LinearLayout>
+
+                    <!-- Description -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@{viewModel.detail.description}"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+
+                    <!-- Status -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/status"
+                        app:drawableStartCompat="@drawable/ic_status" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.status}"
+                        tools:text="Not started" />
+
+                    <!-- Owner -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/owner"
+                        app:drawableStartCompat="@{viewModel.detail.owner.avatar.drawableResId}"
+                        tools:drawableStartCompat="@drawable/ic_user" />
+
+                    <TextView
+                        android:id="@+id/owner"
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.owner.username}"
+                        tools:text="Daring Dove" />
+
+                    <!-- Creator -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/creator"
+                        app:drawableStartCompat="@{viewModel.detail.creator.avatar.drawableResId}"
+                        tools:drawableStartCompat="@drawable/ic_user" />
+
+                    <TextView
+                        android:id="@+id/creator"
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.creator.username}"
+                        tools:text="Peaceful Puffin" />
+
+                    <!-- Due date -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/due_at"
+                        app:drawableStartCompat="@drawable/ic_due_at" />
+
+                    <TextView
+                        android:id="@+id/due_at"
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.detail.dueAt}"
+                        tools:text="Sept 2, 2020 (Wed)" />
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        app:clock="@{clock}"
+                        app:dueMessageOrHide="@{viewModel.detail.dueAt}"
+                        tools:text="Due in 3 days" />
+
+                    <!-- Creation date -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/created_at"
+                        app:drawableStartCompat="@drawable/ic_created_at" />
+
+                    <TextView
+                        android:id="@+id/created_at"
+                        style="@style/Widget.Trackr.TextView.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.detail.createdAt}"
+                        tools:text="July 16, 2020 (Thur)" />
+
+                    <!-- Tags -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/tags"
+                        app:drawableStartCompat="@drawable/ic_tags" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        app:showAllTags="@{true}"
+                        app:tags="@{viewModel.detail.tags}" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/spacing_large"
+            android:contentDescription="@string/edit_task"
+            app:marginBottomSystemBars="@{true}"
+            app:marginLeftSystemBars="@{true}"
+            app:marginRightSystemBars="@{true}"
+            app:srcCompat="@drawable/ic_edit" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

@@ -7,11 +7,13 @@ import enum
 
 from app.core.database import Base
 
+
 class SessionType(enum.Enum):
     VIDEO = "video"
     TEXT = "text"
     AUDIO = "audio"
     GROUP = "group"
+
 
 class SessionStatus(enum.Enum):
     SCHEDULED = "scheduled"
@@ -19,6 +21,7 @@ class SessionStatus(enum.Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     MISSED = "missed"
+
 
 class Session(Base):
     __tablename__ = "sessions"
@@ -38,11 +41,13 @@ class Session(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # العلاقات
-    user = relationship("User", foreign_keys=[user_id], back_populates="sessions")
+    user = relationship("User", foreign_keys=[
+                        user_id], back_populates="sessions")
     therapist = relationship("User", foreign_keys=[therapist_id])
     participants = relationship("SessionParticipant", back_populates="session")
     feedbacks = relationship("SessionFeedback", back_populates="session")
     analyses = relationship("SessionAnalysis", back_populates="session")
+
 
 class SessionParticipant(Base):
     __tablename__ = "session_participants"
@@ -57,6 +62,7 @@ class SessionParticipant(Base):
     session = relationship("Session", back_populates="participants")
     user = relationship("User")
 
+
 class SessionFeedback(Base):
     __tablename__ = "session_feedbacks"
 
@@ -70,6 +76,7 @@ class SessionFeedback(Base):
     # العلاقات
     session = relationship("Session", back_populates="feedbacks")
     user = relationship("User", back_populates="session_feedbacks")
+
 
 class SessionAnalysis(Base):
     __tablename__ = "session_analyses"

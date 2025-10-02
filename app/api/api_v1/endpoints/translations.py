@@ -11,11 +11,12 @@ from app.core.translation_loader import translation_loader
 from app.core.consent import consent_manager
 from app.core.auto_translator import auto_translator
 from app.core.geolocation import geolocation_service
-from app.models.user import User
+
 from app.schemas.user import UserInDB
 from app.core.security import verify_token
 
 router = APIRouter()
+
 
 @router.get("/list")
 async def list_translations(
@@ -37,7 +38,8 @@ async def list_translations(
         languages[lang_code] = {
             "name": translation_loader.get_translation(f"language_name.{lang_code}", lang_code),
             "native_name": translation_loader.get_translation(f"language_native_name.{lang_code}", lang_code),
-            "rtl": lang_code in ["ar", "he", "fa", "ur", "ps", "yi"],  # اللغات التي تكتب من اليمين لليسار
+            # اللغات التي تكتب من اليمين لليسار
+            "rtl": lang_code in ["ar", "he", "fa", "ur", "ps", "yi"],
             "status": translation_loader.get_translation_stats(lang_code)
         }
 
@@ -46,6 +48,7 @@ async def list_translations(
         "default_language": i18n_settings.default_locale,
         "current_language": translator.current_locale
     }
+
 
 @router.get("/stats")
 async def get_translation_stats(
@@ -77,6 +80,7 @@ async def get_translation_stats(
         "stats": stats
     }
 
+
 @router.get("/keys")
 async def get_translation_keys(
     lang_code: str,
@@ -106,6 +110,7 @@ async def get_translation_keys(
         "language": lang_code,
         "keys": keys
     }
+
 
 @router.get("/translate")
 async def translate_text(
@@ -140,7 +145,8 @@ async def translate_text(
         )
 
     # ترجمة النص
-    translated_text = auto_translator.translate_text(text, target_language, source_language)
+    translated_text = auto_translator.translate_text(
+        text, target_language, source_language)
 
     if translated_text is None:
         raise HTTPException(
@@ -154,6 +160,7 @@ async def translate_text(
         "source_language": source_language,
         "target_language": target_language
     }
+
 
 @router.get("/detect")
 async def detect_language(
@@ -185,6 +192,7 @@ async def detect_language(
         "language_name": translation_loader.get_translation(f"language_name.{detected_language}", detected_language)
     }
 
+
 @router.post("/import")
 async def import_translations(
     lang_code: str,
@@ -210,7 +218,8 @@ async def import_translations(
         )
 
     # استيراد الترجمات
-    success = translation_loader.import_translation(lang_code, translation_data)
+    success = translation_loader.import_translation(
+        lang_code, translation_data)
 
     if not success:
         raise HTTPException(
@@ -223,6 +232,7 @@ async def import_translations(
         "message": f"Translations imported successfully for {lang_code}",
         "language": lang_code
     }
+
 
 @router.get("/export")
 async def export_translations(
@@ -259,6 +269,7 @@ async def export_translations(
         "language": lang_code,
         "translations": translation_data
     }
+
 
 @router.post("/set")
 async def set_translation(
@@ -303,6 +314,7 @@ async def set_translation(
         "language": lang_code
     }
 
+
 @router.get("/status")
 async def get_translation_status(
     current_user: UserInDB = Depends(verify_token)
@@ -324,3 +336,6 @@ async def get_translation_status(
         "total_languages": len(i18n_settings.supported_locales),
         "default_language": i18n_settings.default_locale
     }
+cale
+    }
+}

@@ -22,3 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "Comprehensive mental health"
 include(":app")
 include(":app")
+include(":app")
+include(":app")
+ 

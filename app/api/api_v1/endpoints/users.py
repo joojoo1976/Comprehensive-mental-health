@@ -11,6 +11,7 @@ from app.core.security import get_current_user, get_password_hash, invalidate_us
 
 router = APIRouter()
 
+
 @router.get("/me", response_model=schemas.User)
 def read_user_me(
     db: Session = Depends(deps.get_db),
@@ -20,6 +21,7 @@ def read_user_me(
     الحصول على معلومات المستخدم الحالي
     """
     return current_user
+
 
 @router.put("/me", response_model=schemas.User)
 def update_user_me(
@@ -35,6 +37,7 @@ def update_user_me(
 
     return user
 
+
 @router.get("/profile", response_model=schemas.UserProfile)
 def read_user_profile(
     db: Session = Depends(deps.get_db),
@@ -46,6 +49,7 @@ def read_user_profile(
     profile = crud.get_user_profile(db, user_id=current_user.id)
     return profile
 
+
 @router.put("/profile", response_model=schemas.UserProfile)
 def update_user_profile(
     *,
@@ -56,8 +60,10 @@ def update_user_profile(
     """
     تحديث ملف المستخدم الشخصي
     """
-    profile = crud.update_user_profile(db, user_id=current_user.id, profile_in=profile_in)
+    profile = crud.update_user_profile(
+        db, user_id=current_user.id, profile_in=profile_in)
     return profile
+
 
 @router.get("/preferences", response_model=schemas.UserPreferences)
 def read_user_preferences(
@@ -70,6 +76,7 @@ def read_user_preferences(
     preferences = crud.get_user_preferences(db, user_id=current_user.id)
     return preferences
 
+
 @router.put("/preferences", response_model=schemas.UserPreferences)
 def update_user_preferences(
     *,
@@ -80,8 +87,10 @@ def update_user_preferences(
     """
     تحديث تفضيلات المستخدم
     """
-    preferences = crud.update_user_preferences(db, user_id=current_user.id, preferences_in=preferences_in)
+    preferences = crud.update_user_preferences(
+        db, user_id=current_user.id, preferences_in=preferences_in)
     return preferences
+
 
 @router.get("/digital-biomarkers", response_model=List[schemas.DigitalBiomarker])
 def read_user_digital_biomarkers(
@@ -93,8 +102,10 @@ def read_user_digital_biomarkers(
     """
     الحصول على مؤشرات المستخدم الحيوية الرقمية
     """
-    biomarkers = crud.get_user_digital_biomarkers(db, user_id=current_user.id, skip=skip, limit=limit)
+    biomarkers = crud.get_user_digital_biomarkers(
+        db, user_id=current_user.id, skip=skip, limit=limit)
     return biomarkers
+
 
 @router.get("/life-inflection-points", response_model=List[schemas.LifeInflectionPoint])
 def read_user_life_inflection_points(
@@ -106,8 +117,10 @@ def read_user_life_inflection_points(
     """
     الحصول على نقاط الانعطاف الحياتية للمستخدم
     """
-    inflection_points = crud.get_user_life_inflection_points(db, user_id=current_user.id, skip=skip, limit=limit)
+    inflection_points = crud.get_user_life_inflection_points(
+        db, user_id=current_user.id, skip=skip, limit=limit)
     return inflection_points
+
 
 @router.post("/life-inflection-points", response_model=schemas.LifeInflectionPoint)
 def create_life_inflection_point(
@@ -119,8 +132,10 @@ def create_life_inflection_point(
     """
     إنشاء نقطة انعطاف حياتية جديدة
     """
-    point = crud.create_life_inflection_point(db, user_id=current_user.id, point_in=point_in)
+    point = crud.create_life_inflection_point(
+        db, user_id=current_user.id, point_in=point_in)
     return point
+
 
 @router.get("/wellness-suggestions", response_model=List[schemas.WellnessSuggestion])
 def get_user_wellness_suggestions(
@@ -130,5 +145,6 @@ def get_user_wellness_suggestions(
     """
     الحصول على اقتراحات العافة للمستخدم بناءً على حالته
     """
-    suggestions = crud.get_user_wellness_suggestions(db, user_id=current_user.id)
+    suggestions = crud.get_user_wellness_suggestions(
+        db, user_id=current_user.id)
     return suggestions

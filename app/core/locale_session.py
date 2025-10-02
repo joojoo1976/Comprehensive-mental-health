@@ -9,6 +9,7 @@ import json
 from app.core.i18n import translator, i18n_settings
 from app.core.consent import consent_manager
 
+
 class LocaleSessionManager:
     """مدير الجلسات اللغوية"""
 
@@ -222,6 +223,7 @@ class LocaleSessionManager:
         self.set_locale_cookie(response, locale)
 
         return session_id
+
 
 # إنشاء مثيل من مدير الجلسات اللغوية
 locale_session_manager = LocaleSessionManager()

@@ -1,0 +1,49 @@
+<!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <group
+        android:scaleX="1.0909091"
+        android:scaleY="1.0909091">
+        <path
+            android:pathData="M41.8712,36.8128A13.5,13.5 0 0 1 51.6387,37.0125A4,4 0 1 0 54.6887,29.6167A21.5,21.5 0 0 0 39.1288,29.2975A4,4 0 1 0 41.8712,36.8128ZM35.6967,41.4021A4,4 0 1 0 29.2999,36.5979A21.5,21.5 0 0 0 54.6887,69.3833A4,4 0 1 0 51.6387,61.9875A13.5,13.5 0 0 1 35.6967,41.4021ZM62,43.3 A4,4 0 0 1 62,35.3A4,4 0 0 1 62,43.3Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:centerX="45.5"
+                    android:centerY="49.8"
+                    android:gradientRadius="25.9699"
+                    android:type="radial">
+                    <item
+                        android:color="#FF425F80"
+                        android:offset="0" />
+                    <item
+                        android:color="#FF7AA2CF"
+                        android:offset="1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <path
+            android:fillColor="#FF6B98"
+            android:pathData="M78.6433,37.3379C77.4314,36.2081 75.5331,36.2746 74.4032,37.4865L54.7555,58.5609L45.6201,48.1286C44.5286,46.8821 42.6332,46.7565 41.3867,47.848L39.8821,49.1656C38.6356,50.2572 38.51,52.1525 39.6015,53.399L52.0511,67.616C52.5577,68.1945 53.2373,68.5315 53.9449,68.6176C55.0199,68.9673 56.2479,68.6918 57.0696,67.8105L80.2547,42.9418C81.3845,41.7299 81.318,39.8316 80.1061,38.7018L78.6433,37.3379Z" />
+    </group>
+</vector>

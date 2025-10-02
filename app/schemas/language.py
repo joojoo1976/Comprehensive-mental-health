@@ -65,7 +65,8 @@ class SetLocaleRequest(BaseModel):
     """
     نموذج الطلب لنقطة نهاية تعيين اللغة.
     """
-    locale: str = Field(..., description="رمز اللغة المراد تعيينه (e.g., 'ar', 'en').")
+    locale: str = Field(...,
+                        description="رمز اللغة المراد تعيينه (e.g., 'ar', 'en').")
 
 
 class SetLocaleResponse(BaseModel):

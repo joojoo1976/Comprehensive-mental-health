@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 from pydantic import BaseSettings, Field
 import os
 
+
 class I18nSettings(BaseSettings):
     # اللغات المدعومة
     supported_locales: List[str] = [
@@ -457,6 +458,7 @@ class I18nSettings(BaseSettings):
 
     class Config:
         env_file = ".env"
+
 
 # إنشاء كائن الإعدادات
 i18n_settings = I18nSettings()

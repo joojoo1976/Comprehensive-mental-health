@@ -9,12 +9,13 @@ from app.core.i18n import translator, i18n_settings, _
 from app.core.auto_translator import auto_translator
 from app.core.consent import consent_manager
 from app.core.geolocation import geolocation_service
-from app.models.user import User
+
 from app.schemas.user import UserInDB
 from app.core.security import verify_token
 from fastapi import WebSocket, WebSocketDisconnect
 
 router = APIRouter()
+
 
 class RealtimeTranslationManager:
     """مدير الترجمة في الوقت الفعلي"""
@@ -63,8 +64,10 @@ class RealtimeTranslationManager:
         for connection in self.active_connections.values():
             await connection.send_text(message)
 
+
 # إنشاء مثيل من المدير
 realtime_translation_manager = RealtimeTranslationManager()
+
 
 @router.websocket("/translate")
 async def websocket_translate(websocket: WebSocket, token: str, db: Session = Depends(get_db)):
@@ -130,6 +133,7 @@ async def websocket_translate(websocket: WebSocket, token: str, db: Session = De
     except WebSocketDisconnect:
         realtime_translation_manager.disconnect(user_id)
 
+
 @router.websocket("/detect-language")
 async def websocket_detect_language(websocket: WebSocket, token: str, db: Session = Depends(get_db)):
     """نقطة نهاية WebSocket لكشف اللغة"""
@@ -194,6 +198,7 @@ async def websocket_detect_language(websocket: WebSocket, token: str, db: Sessio
     except WebSocketDisconnect:
         realtime_translation_manager.disconnect(user_id)
 
+
 @router.get("/user-language")
 async def get_user_language(
     user_id: int,
@@ -222,7 +227,7 @@ async def get_user_language(
             "user_id": user_id,
             "language": realtime_translation_manager.user_languages[user_id],
             "language_name": translator.get_translation(
-                f"language_name.{realtime_translation_manager.user_languages[user_id]}", 
+                f"language_name.{realtime_translation_manager.user_languages[user_id]}",
                 realtime_translation_manager.user_languages[user_id]
             )
         }
@@ -231,10 +236,11 @@ async def get_user_language(
             "user_id": user_id,
             "language": i18n_settings.default_locale,
             "language_name": translator.get_translation(
-                f"language_name.{i18n_settings.default_locale}", 
+                f"language_name.{i18n_settings.default_locale}",
                 i18n_settings.default_locale
             )
         }
+
 
 @router.post("/set-user-language")
 async def set_user_language(
@@ -288,6 +294,7 @@ async def set_user_language(
         "language": language
     }
 
+
 @router.get("/active-users")
 async def get_active_users(
     current_user: UserInDB = Depends(verify_token)
@@ -313,4 +320,6 @@ async def get_active_users(
     return {
         "active_users": active_users,
         "count": len(active_users)
+    }
+": len(active_users)
     }

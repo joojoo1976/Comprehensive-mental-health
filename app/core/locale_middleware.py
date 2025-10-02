@@ -12,6 +12,7 @@ from app.models.user import User as UserModel
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
+
 class LocaleMiddleware(BaseHTTPMiddleware):
     """Middleware للتعامل مع اللغة"""
 
@@ -36,7 +37,8 @@ class LocaleMiddleware(BaseHTTPMiddleware):
             user_id = verify_token(token_value)
 
         # الحصول على اللغة من الطلب
-        locale = locale_session_manager.get_locale_from_request(request, user_id)
+        locale = locale_session_manager.get_locale_from_request(
+            request, user_id)
 
         # تعيين اللغة
         translator.set_locale(locale)
@@ -53,9 +55,11 @@ class LocaleMiddleware(BaseHTTPMiddleware):
                 # تحديث الجلسة اللغوية
                 session_id = request.cookies.get("locale_session")
                 if session_id:
-                    locale_session_manager.update_session_locale(session_id, consent_status["preferred_locale"])
+                    locale_session_manager.update_session_locale(
+                        session_id, consent_status["preferred_locale"])
 
         return response
+
 
 class LocaleConsentMiddleware(BaseHTTPMiddleware):
     """Middleware للتعامل مع موافقة اللغة"""
@@ -106,6 +110,7 @@ class LocaleConsentMiddleware(BaseHTTPMiddleware):
 
         # معالجة الطلب العادي
         return await call_next(request)
+
 
 class LocaleRedirectMiddleware(BaseHTTPMiddleware):
     """Middleware لإعادة توجيه المستخدمين بناءً على لغتهم"""

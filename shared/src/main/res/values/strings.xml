@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2021 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+<resources>
+    <!-- Task statuses -->
+    <eat-comment />
+    <string name="in_progress">In progress</string>
+    <string name="not_started">Not started</string>
+    <string name="completed">Completed</string>
+    <string name="archived">Archived</string>
+
+    <!-- Tasks screen -->
+    <string name="add_task">Add a new task</string>
+
+    <!-- Tasks screen header -->
+    <string name="header_label_with_count">%1$s (%2$d)</string>
+    <string name="expand_tasks">Expand tasks</string>
+    <string name="collapse_tasks">Collapse tasks</string>
+
+    <!-- Task summary -->
+    <string name="owner">Owner</string>
+    <string name="more_tags">+%d</string>
+
+    <!-- Tasks bottom app bar -->
+    <string name="menu">Menu</string>
+    <string name="tasks">Tasks</string>
+    <string name="archive">Archive</string>
+    <string name="settings">Settings</string>
+
+    <!-- Due date messages -->
+    <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
+    <string name="due_date_generic">Due %s</string>
+    <plurals name="due_date_overdue_x_days">
+        <item quantity="one">Overdue by %d day</item>
+        <item quantity="other">Overdue by %d days</item>
+    </plurals>
+    <string name="due_date_today">Due today</string>
+    <plurals name="due_date_days">
+        <item quantity="one">Due tomorrow</item>
+        <item quantity="other">Due in %d days</item>
+    </plurals>
+
+</resources>

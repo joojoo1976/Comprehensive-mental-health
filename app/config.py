@@ -2,7 +2,7 @@
 
 from pydantic_settings import BaseSettings
 from typing import Optional
-import os
+
 
 class Settings(BaseSettings):
     # إعدادات التطبيق الأساسية
@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     api_prefix: str = "/api/v1"
 
     # إعدادات قاعدة البيانات
-    database_url: str = "postgresql://user:password@localhost/mental_health_db"
+    database_url: str = "postgresql://user:password@192.168.1.7/mental_health_db"
 
     # إعدادات Redis
     redis_url: str = "redis://localhost:6379"
@@ -43,10 +43,14 @@ class Settings(BaseSettings):
     # إعدانات الملفات
     upload_dir: str = "uploads"
     max_file_size: int = 10 * 1024 * 1024  # 10MB
+    # Development helper: when True, the app will auto-create DB
+    # tables on startup
+    auto_create_db: bool = True
 
     class Config:
         env_file = ".env"
         case_sensitive = False
+
 
 # إنشاء كائن الإعدادات
 settings = Settings()

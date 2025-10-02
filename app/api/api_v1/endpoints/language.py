@@ -9,7 +9,7 @@ from app.core.database import get_db
 from app.core.i18n import translator, i18n_settings, _
 from app.core.consent import consent_manager
 from app.core.geolocation import geolocation_service
-from app.models.user import User
+
 from app.schemas import language as language_schemas
 from app.schemas.user import UserInDB
 from app.core.security import get_current_user, PermissionChecker
@@ -48,9 +48,10 @@ async def get_language_consent(
     # الحصول على اللغة المقترحة بناءً على الموقع الجغرافي
     client_ip = geolocation_service.get_client_ip(request)
     suggested_locale_from_ip = geolocation_service.get_locale_by_ip(client_ip)
-    
+
     # إذا فشل تحديد الموقع، اقترح لغة المتصفح أو اللغة الافتراضية
-    suggested_locale = suggested_locale_from_ip if suggested_locale_from_ip != i18n_settings.default_locale else translator.get_user_locale_from_browser(request) or i18n_settings.default_locale
+    suggested_locale = suggested_locale_from_ip if suggested_locale_from_ip != i18n_settings.default_locale else translator.get_user_locale_from_browser(
+        request) or i18n_settings.default_locale
 
     return {
         "consent_given": consent_status["consent_given"],
@@ -172,6 +173,7 @@ async def detect_locale(
         "source": "default",
         "all_options": dict(locales)
     }
+
 
 @router.get(
     "/options",

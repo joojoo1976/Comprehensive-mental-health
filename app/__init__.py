@@ -1,2 +1,6 @@
 # تطبيق منصة الصحة النفسية الشاملة
-pip install -r [requirements.txt](http://_vscodecontentref_/0)
+
+from . import crud
+from . import schemas
+from . import models
+

@@ -1,0 +1,118 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk 31
+    buildToolsVersion build_tools_version
+    defaultConfig {
+        applicationId 'com.example.android.trackr.compose'
+        minSdk 21
+        targetSdk 30
+        versionCode 1
+        versionName '1.0.0-alpha01'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        useIR = true
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion kotlin_version
+    }
+    testOptions {
+        unitTests.all {
+            systemProperty 'robolectric.enabledSdks', '28'
+        }
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    packagingOptions {
+        excludes += '/META-INF/AL2.0'
+        excludes += '/META-INF/LGPL2.1'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += [
+                '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
+        ]
+    }
+}
+
+dependencies {
+    implementation project(':shared')
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
+
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.activity:activity-compose:$activity_compose_version"
+    implementation "androidx.navigation:navigation-compose:$nav_compose_version"
+    implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
+    kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "com.google.truth:truth:$truth_version"
+    testImplementation "androidx.test:core-ktx:$androidx_test_core_version"
+    testImplementation "androidx.test:runner:$androidx_test_runner_version"
+    testImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
+    testImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+
+    // We need this for tests. It should be 'debugImplementation' to put the test manifest in the
+    // app package.
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    androidTestImplementation "junit:junit:$junit_version"
+    androidTestImplementation "com.google.truth:truth:$truth_version"
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
+    androidTestImplementation "androidx.test:runner:$androidx_test_runner_version"
+    androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+}

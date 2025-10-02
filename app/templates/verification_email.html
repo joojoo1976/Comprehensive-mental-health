@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفعيل حسابك في {{ app_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #4a6cf7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4a6cf7;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .highlight {
+            background-color: #f0f7ff;
+            border-left: 4px solid #4a6cf7;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>مرحباً {{ user_name }}</h1>
+        </div>
+        <div class="content">
+            <p>شكراً لك للانضمام إلى منصة {{ app_name }}. لتفعيل حسابك، يرجى النقر على الرابط أدناه:</p>
+
+            <div class="highlight">
+                <p>لقد تم إنشاء حسابك بنجاح. للتحقق من بريدك الإلكتروني والبدء في استخدام المنصة، يرجى النقر على الرابط التالي:</p>
+                <a href="{{ verification_url }}" class="btn">تفعيل حسابي</a>
+            </div>
+
+            <p>إذا لم تتمكن من النقر على الرابط، يرجى نسخه ولصقه في متصفح الويب:</p>
+            <p>{{ verification_url }}</p>
+
+            <p>هذا الرابط صالح لمدة 24 ساعة فقط. بعد انتهاء المدة، ستحتاج إلى طلب رمز تحقق جديد.</p>
+
+            <p>إذا لم تكن أنت من قام بإنشاء هذا الحساب، يرجى تجاهل هذا البريد الإلكتروني.</p>
+        </div>
+        <div class="footer">
+            <p>هذا بريد إلكتروني تلقائي. يرجى عدم الرد عليه.</p>
+            <p>&copy; {{ app_name }}. جميع الحقوق محفوظة.</p>
+        </div>
+    </div>
+</body>
+</html>

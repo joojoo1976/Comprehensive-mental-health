@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="taskSummary"
+            type="com.example.android.trackr.data.TaskSummary" />
+
+        <variable
+            name="clock"
+            type="java.time.Clock" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/card_background"
+        app:clickActionLabel="@{@string/explore_details}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Marked as not importantForAccessibility and omitting the contentDescription
+            because this functionality is exposed as a custom accessibility action.
+            See TasksAdapter.kt for implementation. -->
+            <com.example.android.trackr.ui.widget.StarButton
+                android:id="@+id/star"
+                android:layout_width="@dimen/home_task_star_size"
+                android:layout_height="@dimen/home_task_star_size"
+                android:layout_marginStart="@dimen/home_task_star_margin"
+                android:layout_marginEnd="@dimen/home_task_star_margin"
+                android:importantForAccessibility="no"
+                android:checked="@{taskSummary.starred}"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                app:ensureMinTouchArea="@{@dimen/min_touch_target}" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/home_task_star_margin"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{taskSummary.title}"
+                android:textAppearance="?attr/textAppearanceHeadline2"
+                android:textDirection="locale"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/star"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/lorem/random" />
+
+            <ImageView
+                android:id="@+id/owner_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:importantForAccessibility="no"
+                app:imageResource="@{taskSummary.owner.avatar.drawableResId}"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:src="@drawable/ic_user" />
+
+            <TextView
+                android:id="@+id/owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:text="@{@string/user(taskSummary.owner.username)}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintBottom_toBottomOf="@id/owner_avatar"
+                app:layout_constraintStart_toEndOf="@+id/owner_avatar"
+                app:layout_constraintTop_toTopOf="@id/owner_avatar"
+                tools:text="Owner: Peaceful Puffin" />
+
+            <TextView
+                android:id="@+id/due_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:clock="@{clock}"
+                app:dueMessageOrDueDate="@{taskSummary.dueAt}"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/owner"
+                tools:text="Due next Monday" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/due_date"
+                app:showAllTags="@{false}"
+                app:tags="@{taskSummary.tags}">
+
+                <include layout="@layout/tag" />
+
+                <include layout="@layout/tag" />
+
+                <include layout="@layout/tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/chip_height"
+                    android:gravity="center_vertical"
+                    tools:text="+2 more tags" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

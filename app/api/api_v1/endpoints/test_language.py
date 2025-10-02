@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from typing import Dict, Any
+
 
 from app.main import app  # افترض أن هذا هو ملف التطبيق الرئيسي
 from app.core.database import get_db
@@ -64,9 +64,12 @@ def test_get_language_consent(mocker):
     mocker.patch("app.core.consent.consent_manager.get_locale_options", return_value={
         "en": {"name": "English", "native_name": "English", "rtl": False}
     })
-    mocker.patch("app.core.geolocation.geolocation_service.get_client_ip", return_value="8.8.8.8")
-    mocker.patch("app.core.geolocation.geolocation_service.get_locale_by_ip", return_value="en")
-    mocker.patch("app.core.i18n.translator.get_user_locale_from_browser", return_value="fr")
+    mocker.patch(
+        "app.core.geolocation.geolocation_service.get_client_ip", return_value="8.8.8.8")
+    mocker.patch(
+        "app.core.geolocation.geolocation_service.get_locale_by_ip", return_value="en")
+    mocker.patch(
+        "app.core.i18n.translator.get_user_locale_from_browser", return_value="fr")
 
     # إجراء الطلب
     response = client.get("/api/v1/language/consent")
@@ -91,7 +94,8 @@ def test_give_language_consent(mocker, db_session):
         "locale_source": "manual",
         "consent_data": {"consent_given": True, "preferred_locale": "ar"}
     }
-    mocker.patch("app.core.consent.consent_manager.record_consent", return_value=mock_consent_result)
+    mocker.patch("app.core.consent.consent_manager.record_consent",
+                 return_value=mock_consent_result)
     mock_set_locale = mocker.patch("app.core.i18n.translator.set_locale")
 
     # بيانات الطلب
@@ -106,7 +110,7 @@ def test_give_language_consent(mocker, db_session):
     assert data["success"] is True
     assert data["consent_status"]["consent_given"] is True
     assert data["consent_status"]["preferred_locale"] == "ar"
-    
+
     # التحقق من أن دالة تعيين اللغة قد تم استدعاؤها
     mock_set_locale.assert_called_once_with("ar")
 
@@ -138,8 +142,10 @@ def test_detect_locale_with_browser_preference(mocker, db_session):
     mocker.patch("app.core.consent.consent_manager.get_consent_status", return_value={
         "consent_given": False, "preferred_locale": None
     })
-    mocker.patch("app.core.i18n.translator.get_user_locale_from_browser", return_value="de")
-    mocker.patch("app.core.geolocation.geolocation_service.get_locale_by_ip", return_value="en")
+    mocker.patch(
+        "app.core.i18n.translator.get_user_locale_from_browser", return_value="de")
+    mocker.patch(
+        "app.core.geolocation.geolocation_service.get_locale_by_ip", return_value="en")
 
     # إجراء الطلب
     response = client.get("/api/v1/language/detect")
@@ -159,7 +165,8 @@ def test_set_locale_success(mocker, db_session):
     mock_consent_result = {
         "consent_given": True, "preferred_locale": "es", "locale_source": "manual"
     }
-    mocker.patch("app.core.consent.consent_manager.record_consent", return_value=mock_consent_result)
+    mocker.patch("app.core.consent.consent_manager.record_consent",
+                 return_value=mock_consent_result)
     mock_set_locale = mocker.patch("app.core.i18n.translator.set_locale")
 
     # إجراء الطلب

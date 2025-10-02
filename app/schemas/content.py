@@ -7,16 +7,21 @@ from pydantic import BaseModel
 from app.models.content import ContentType
 
 # Base schemas
+
+
 class ContentCategoryBase(BaseModel):
     name: str
     description: Optional[str] = None
     icon: Optional[str] = None
 
+
 class ContentCategoryCreate(ContentCategoryBase):
     pass
 
+
 class ContentCategoryUpdate(ContentCategoryBase):
     pass
+
 
 class ContentCategoryInDBBase(ContentCategoryBase):
     id: int
@@ -26,8 +31,10 @@ class ContentCategoryInDBBase(ContentCategoryBase):
     class Config:
         orm_mode = True
 
+
 class ContentCategory(ContentCategoryInDBBase):
     pass
+
 
 class ArticleBase(BaseModel):
     title: str
@@ -39,11 +46,14 @@ class ArticleBase(BaseModel):
     featured_image_url: Optional[str] = None
     published: bool = False
 
+
 class ArticleCreate(ArticleBase):
     pass
 
+
 class ArticleUpdate(ArticleBase):
     pass
+
 
 class ArticleInDBBase(ArticleBase):
     id: int
@@ -53,8 +63,10 @@ class ArticleInDBBase(ArticleBase):
     class Config:
         orm_mode = True
 
+
 class Article(ArticleInDBBase):
     pass
+
 
 class MeditationBase(BaseModel):
     title: str
@@ -66,11 +78,14 @@ class MeditationBase(BaseModel):
     background_music_url: Optional[str] = None
     published: bool = False
 
+
 class MeditationCreate(MeditationBase):
     pass
 
+
 class MeditationUpdate(MeditationBase):
     pass
+
 
 class MeditationInDBBase(MeditationBase):
     id: int
@@ -80,8 +95,10 @@ class MeditationInDBBase(MeditationBase):
     class Config:
         orm_mode = True
 
+
 class Meditation(MeditationInDBBase):
     pass
+
 
 class ExerciseBase(BaseModel):
     title: str
@@ -94,11 +111,14 @@ class ExerciseBase(BaseModel):
     image_url: Optional[str] = None
     published: bool = False
 
+
 class ExerciseCreate(ExerciseBase):
     pass
 
+
 class ExerciseUpdate(ExerciseBase):
     pass
+
 
 class ExerciseInDBBase(ExerciseBase):
     id: int
@@ -108,8 +128,10 @@ class ExerciseInDBBase(ExerciseBase):
     class Config:
         orm_mode = True
 
+
 class Exercise(ExerciseInDBBase):
     pass
+
 
 class ProgramBase(BaseModel):
     title: str
@@ -120,11 +142,14 @@ class ProgramBase(BaseModel):
     image_url: Optional[str] = None
     published: bool = False
 
+
 class ProgramCreate(ProgramBase):
     pass
 
+
 class ProgramUpdate(ProgramBase):
     pass
+
 
 class ProgramInDBBase(ProgramBase):
     id: int
@@ -134,8 +159,10 @@ class ProgramInDBBase(ProgramBase):
     class Config:
         orm_mode = True
 
+
 class Program(ProgramInDBBase):
     pass
+
 
 class ProgramModuleBase(BaseModel):
     program_id: int
@@ -145,11 +172,14 @@ class ProgramModuleBase(BaseModel):
     content: Optional[str] = None
     duration: Optional[int] = None  # بالدقائق
 
+
 class ProgramModuleCreate(ProgramModuleBase):
     pass
 
+
 class ProgramModuleUpdate(ProgramModuleBase):
     pass
+
 
 class ProgramModuleInDBBase(ProgramModuleBase):
     id: int
@@ -159,8 +189,10 @@ class ProgramModuleInDBBase(ProgramModuleBase):
     class Config:
         orm_mode = True
 
+
 class ProgramModule(ProgramModuleInDBBase):
     pass
+
 
 class SupportGroupBase(BaseModel):
     name: str
@@ -169,11 +201,14 @@ class SupportGroupBase(BaseModel):
     max_members: Optional[int] = None
     is_private: bool = False
 
+
 class SupportGroupCreate(SupportGroupBase):
     moderator_id: int
 
+
 class SupportGroupUpdate(SupportGroupBase):
     pass
+
 
 class SupportGroupInDBBase(SupportGroupBase):
     id: int
@@ -184,16 +219,20 @@ class SupportGroupInDBBase(SupportGroupBase):
     class Config:
         orm_mode = True
 
+
 class SupportGroup(SupportGroupInDBBase):
     pass
+
 
 class GroupMembershipBase(BaseModel):
     group_id: int
     user_id: int
     is_admin: bool = False
 
+
 class GroupMembershipCreate(GroupMembershipBase):
     pass
+
 
 class GroupMembershipInDBBase(GroupMembershipBase):
     id: int
@@ -202,16 +241,20 @@ class GroupMembershipInDBBase(GroupMembershipBase):
     class Config:
         orm_mode = True
 
+
 class GroupMembership(GroupMembershipInDBBase):
     pass
+
 
 class GroupPostBase(BaseModel):
     group_id: int
     user_id: int
     content: str
 
+
 class GroupPostCreate(GroupPostBase):
     pass
+
 
 class GroupPostInDBBase(GroupPostBase):
     id: int
@@ -220,16 +263,20 @@ class GroupPostInDBBase(GroupPostBase):
     class Config:
         orm_mode = True
 
+
 class GroupPost(GroupPostInDBBase):
     pass
+
 
 class GroupCommentBase(BaseModel):
     post_id: int
     user_id: int
     content: str
 
+
 class GroupCommentCreate(GroupCommentBase):
     pass
+
 
 class GroupCommentInDBBase(GroupCommentBase):
     id: int
@@ -238,15 +285,19 @@ class GroupCommentInDBBase(GroupCommentBase):
     class Config:
         orm_mode = True
 
+
 class GroupComment(GroupCommentInDBBase):
     pass
+
 
 class ArticleBookmarkBase(BaseModel):
     user_id: int
     article_id: int
 
+
 class ArticleBookmarkCreate(ArticleBookmarkBase):
     pass
+
 
 class ArticleBookmarkInDBBase(ArticleBookmarkBase):
     id: int
@@ -255,16 +306,20 @@ class ArticleBookmarkInDBBase(ArticleBookmarkBase):
     class Config:
         orm_mode = True
 
+
 class ArticleBookmark(ArticleBookmarkInDBBase):
     pass
+
 
 class MeditationCompletionBase(BaseModel):
     user_id: int
     meditation_id: int
     rating: Optional[int] = None  # 1-5
 
+
 class MeditationCompletionCreate(MeditationCompletionBase):
     pass
+
 
 class MeditationCompletionInDBBase(MeditationCompletionBase):
     id: int
@@ -273,16 +328,20 @@ class MeditationCompletionInDBBase(MeditationCompletionBase):
     class Config:
         orm_mode = True
 
+
 class MeditationCompletion(MeditationCompletionInDBBase):
     pass
+
 
 class ExerciseCompletionBase(BaseModel):
     user_id: int
     exercise_id: int
     notes: Optional[str] = None
 
+
 class ExerciseCompletionCreate(ExerciseCompletionBase):
     pass
+
 
 class ExerciseCompletionInDBBase(ExerciseCompletionBase):
     id: int
@@ -291,16 +350,20 @@ class ExerciseCompletionInDBBase(ExerciseCompletionBase):
     class Config:
         orm_mode = True
 
+
 class ExerciseCompletion(ExerciseCompletionInDBBase):
     pass
+
 
 class ProgramEnrollmentBase(BaseModel):
     user_id: int
     program_id: int
     progress: int = 0  # بالمئوية
 
+
 class ProgramEnrollmentCreate(ProgramEnrollmentBase):
     pass
+
 
 class ProgramEnrollmentInDBBase(ProgramEnrollmentBase):
     id: int
@@ -310,16 +373,20 @@ class ProgramEnrollmentInDBBase(ProgramEnrollmentBase):
     class Config:
         orm_mode = True
 
+
 class ProgramEnrollment(ProgramEnrollmentInDBBase):
     pass
+
 
 class ModuleCompletionBase(BaseModel):
     user_id: int
     module_id: int
     notes: Optional[str] = None
 
+
 class ModuleCompletionCreate(ModuleCompletionBase):
     pass
+
 
 class ModuleCompletionInDBBase(ModuleCompletionBase):
     id: int
@@ -327,6 +394,7 @@ class ModuleCompletionInDBBase(ModuleCompletionBase):
 
     class Config:
         orm_mode = True
+
 
 class ModuleCompletion(ModuleCompletionInDBBase):
     pass

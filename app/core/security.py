@@ -7,14 +7,17 @@ from typing import Optional, List
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, status, Depends, Request
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from app import crud  # استيراد crud للوصول إلى قاعدة البيانات
-from app.core.cache import cache_service # استيراد خدمة ذاكرة التخزين المؤقت الجديدة
+# استيراد خدمة ذاكرة التخزين المؤقت الجديدة
+from app.core.cache import cache_service
 from app.core.database import get_db
 from app.config import settings
 from app.schemas.user import UserInDB
+from app.models import user
 
 logger = logging.getLogger(__name__)
 
@@ -22,14 +25,20 @@ logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # دالة لتشفير كلمة المرور
+
+
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 # دالة للتحقق من كلمة المرور
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 # دالة لإنشاء رمز JWT
+
+
 def create_access_token(subject: int, expires_delta: Optional[timedelta] = None):
     to_encode = {"sub": str(subject)}
     if expires_delta:
@@ -37,10 +46,13 @@ def create_access_token(subject: int, expires_delta: Optional[timedelta] = None)
     else:
         expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+    encoded_jwt = jwt.encode(
+        to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
 
 # دالة للتحقق من رمز JWT
+
+
 def get_current_user(token: str = Depends(OAuth2PasswordBearer(tokenUrl=f"{settings.api_prefix}/auth/login")), db: Session = Depends(get_db)) -> UserInDB:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -48,11 +60,12 @@ def get_current_user(token: str = Depends(OAuth2PasswordBearer(tokenUrl=f"{setti
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, settings.secret_key,
+                             algorithms=[settings.algorithm])
         user_id: str = payload.get("sub")
         if user_id is None:
             raise credentials_exception
-        
+
         # الخطوة 1: التحقق من ذاكرة التخزين المؤقت أولاً
         cached_user = cache_service.get_user(int(user_id))
         if cached_user:
@@ -65,7 +78,7 @@ def get_current_user(token: str = Depends(OAuth2PasswordBearer(tokenUrl=f"{setti
 
         if user is None:
             raise credentials_exception
-        
+
         user_data = UserInDB.from_orm(user)
 
         # الخطوة 2: تخزين بيانات المستخدم في ذاكرة التخزين المؤقت
@@ -75,13 +88,15 @@ def get_current_user(token: str = Depends(OAuth2PasswordBearer(tokenUrl=f"{setti
     except JWTError:
         raise credentials_exception
 
+
 def verify_token(token: str) -> Optional[int]:
     """
     يفك تشفير رمز JWT ويعيد معرّف المستخدم.
     يعيد None إذا كان الرمز غير صالح أو منتهي الصلاحية.
     """
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, settings.secret_key,
+                             algorithms=[settings.algorithm])
         user_id = payload.get("sub")
         if user_id is None:
             return None
@@ -95,11 +110,13 @@ def invalidate_user_cache(user_id: int):
     """إبطال صلاحية ذاكرة التخزين المؤقت لمستخدم معين."""
     cache_service.invalidate_user(user_id)
 
+
 class PermissionChecker:
     """
     تبعية للتحقق من صلاحيات المستخدم.
     تتحقق مما إذا كان لدى المستخدم جميع الصلاحيات المطلوبة.
     """
+
     def __init__(self, required_permissions: List[str]):
         self.required_permissions = set(required_permissions)
 
@@ -109,7 +126,8 @@ class PermissionChecker:
         """
         # استخراج صلاحيات المستخدم من دوره
         # نفترض أن `current_user` يحتوي الآن على `role` و `role.permissions` بفضل `joinedload`
-        user_permissions = {p.name for p in current_user.role.permissions} if current_user.role and current_user.role.permissions else set()
+        user_permissions = {
+            p.name for p in current_user.role.permissions} if current_user.role and current_user.role.permissions else set()
 
         # التحقق مما إذا كان المستخدم يمتلك جميع الصلاحيات المطلوبة
         if not self.required_permissions.issubset(user_permissions):

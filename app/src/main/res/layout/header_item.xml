@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="headerData"
+            type="com.example.android.trackr.ui.tasks.HeaderData" />
+
+        <variable
+            name="listener"
+            type="com.example.android.trackr.ui.tasks.TasksAdapter.ItemListener" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/header_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/listPreferredItemHeight"
+        android:onClick="@{() -> listener.onHeaderClicked(headerData)}"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/expand"
+            android:layout_width="@dimen/home_task_star_size"
+            android:layout_height="@dimen/home_task_star_size"
+            android:layout_marginStart="@dimen/home_task_star_margin"
+            android:layout_marginEnd="@dimen/home_task_star_margin"
+            android:importantForAccessibility="no"
+            android:src="@{headerData.expanded ? @drawable/ic_expand_more : @drawable/ic_expand_less}"
+            tools:src="@drawable/ic_expand_more" />
+
+        <TextView
+            style="@style/HomeSectionHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{headerData.label(context)}"
+            tools:text="In progress (2)" />
+
+    </LinearLayout>
+
+</layout>

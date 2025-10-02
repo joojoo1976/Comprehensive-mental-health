@@ -1,7 +1,7 @@
 # نقاط نهاية المحتوى
 
 from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -9,6 +9,7 @@ from app.api import deps
 from app.core.security import get_current_user
 
 router = APIRouter()
+
 
 @router.get("/categories", response_model=List[schemas.ContentCategory])
 def read_content_categories(
@@ -21,6 +22,7 @@ def read_content_categories(
     categories = crud.get_content_categories(db)
     return categories
 
+
 @router.get("/articles", response_model=List[schemas.Article])
 def read_articles(
     category_id: int = None,
@@ -32,8 +34,10 @@ def read_articles(
     """
     الحصول على قائمة المقالات
     """
-    articles = crud.get_articles(db, category_id=category_id, skip=skip, limit=limit)
+    articles = crud.get_articles(
+        db, category_id=category_id, skip=skip, limit=limit)
     return articles
+
 
 @router.get("/articles/{article_id}", response_model=schemas.Article)
 def read_article(
@@ -52,6 +56,7 @@ def read_article(
         )
     return article
 
+
 @router.post("/articles/{article_id}/bookmark")
 def bookmark_article(
     article_id: int,
@@ -61,13 +66,15 @@ def bookmark_article(
     """
     إضافة المقال إلى المفضلة
     """
-    success = crud.bookmark_article(db, article_id=article_id, user_id=current_user.id)
+    success = crud.bookmark_article(
+        db, article_id=article_id, user_id=current_user.id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="فشل إضافة المقال إلى المفضلة"
         )
     return {"msg": "تمت إضافة المقال إلى المفضلة بنجاح"}
+
 
 @router.delete("/articles/{article_id}/bookmark")
 def remove_bookmark_article(
@@ -78,13 +85,15 @@ def remove_bookmark_article(
     """
     إزالة المقال من المفضلة
     """
-    success = crud.remove_bookmark_article(db, article_id=article_id, user_id=current_user.id)
+    success = crud.remove_bookmark_article(
+        db, article_id=article_id, user_id=current_user.id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="فشل إزالة المقال من المفضلة"
         )
     return {"msg": "تمت إزالة المقال من المفضلة بنجاح"}
+
 
 @router.get("/meditations", response_model=List[schemas.Meditation])
 def read_meditations(
@@ -97,8 +106,10 @@ def read_meditations(
     """
     الحصول على قائمة جلسات التأمل
     """
-    meditations = crud.get_meditations(db, category_id=category_id, skip=skip, limit=limit)
+    meditations = crud.get_meditations(
+        db, category_id=category_id, skip=skip, limit=limit)
     return meditations
+
 
 @router.get("/meditations/{meditation_id}", response_model=schemas.Meditation)
 def read_meditation(
@@ -117,6 +128,7 @@ def read_meditation(
         )
     return meditation
 
+
 @router.get("/exercises", response_model=List[schemas.Exercise])
 def read_exercises(
     category_id: int = None,
@@ -128,8 +140,10 @@ def read_exercises(
     """
     الحصول على قائمة التمارين
     """
-    exercises = crud.get_exercises(db, category_id=category_id, skip=skip, limit=limit)
+    exercises = crud.get_exercises(
+        db, category_id=category_id, skip=skip, limit=limit)
     return exercises
+
 
 @router.get("/exercises/{exercise_id}", response_model=schemas.Exercise)
 def read_exercise(
@@ -147,6 +161,7 @@ def read_exercise(
             detail="التمرين غير موجود"
         )
     return exercise
+
 
 @router.post("/exercises/{exercise_id}/complete")
 def complete_exercise(
@@ -168,6 +183,7 @@ def complete_exercise(
         )
     return {"msg": "تم تسجيل إكمال التمرين بنجاح"}
 
+
 @router.get("/programs", response_model=List[schemas.Program])
 def read_programs(
     skip: int = 0,
@@ -180,6 +196,7 @@ def read_programs(
     """
     programs = crud.get_programs(db, skip=skip, limit=limit)
     return programs
+
 
 @router.get("/programs/{program_id}", response_model=schemas.Program)
 def read_program(
@@ -198,6 +215,7 @@ def read_program(
         )
     return program
 
+
 @router.post("/programs/{program_id}/enroll")
 def enroll_program(
     program_id: int,
@@ -207,7 +225,8 @@ def enroll_program(
     """
     التسجيل في برنامج
     """
-    enrollment = crud.enroll_program(db, program_id=program_id, user_id=current_user.id)
+    enrollment = crud.enroll_program(
+        db, program_id=program_id, user_id=current_user.id)
     if not enrollment:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -215,10 +234,11 @@ def enroll_program(
         )
     return {"msg": "تم التسجيل في البرنامج بنجاح"}
 
+
 @router.get("/groups", response_model=List[schemas.SupportGroup])
 def read_support_groups(
     skip: int = 0,
-    limit: 100,
+    limit: int = 100,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(get_current_user),
 ) -> Any:
@@ -227,6 +247,7 @@ def read_support_groups(
     """
     groups = crud.get_support_groups(db, skip=skip, limit=limit)
     return groups
+
 
 @router.get("/groups/{group_id}", response_model=schemas.SupportGroup)
 def read_support_group(
@@ -245,6 +266,7 @@ def read_support_group(
         )
     return group
 
+
 @router.post("/groups/{group_id}/join")
 def join_support_group(
     group_id: int,
@@ -254,13 +276,15 @@ def join_support_group(
     """
     الانضمام إلى مجموعة دعم
     """
-    membership = crud.join_support_group(db, group_id=group_id, user_id=current_user.id)
+    membership = crud.join_support_group(
+        db, group_id=group_id, user_id=current_user.id)
     if not membership:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="فشل الانضمام إلى المجموعة"
         )
     return {"msg": "تم الانضمام إلى المجموعة بنجاح"}
+
 
 @router.post("/groups/{group_id}/leave")
 def leave_support_group(
@@ -271,7 +295,8 @@ def leave_support_group(
     """
     المغادرة من مجموعة دعم
     """
-    success = crud.leave_support_group(db, group_id=group_id, user_id=current_user.id)
+    success = crud.leave_support_group(
+        db, group_id=group_id, user_id=current_user.id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

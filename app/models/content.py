@@ -1,11 +1,12 @@
 # نماذج المحتوى
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
 
 from app.core.database import Base
+
 
 class ContentType(enum.Enum):
     ARTICLE = "article"
@@ -15,6 +16,7 @@ class ContentType(enum.Enum):
     VIDEO = "video"
     AUDIO = "audio"
     BOOK = "book"
+
 
 class ContentCategory(Base):
     __tablename__ = "content_categories"
@@ -32,6 +34,7 @@ class ContentCategory(Base):
     exercises = relationship("Exercise", back_populates="category")
     programs = relationship("Program", back_populates="category")
 
+
 class Article(Base):
     __tablename__ = "articles"
 
@@ -39,7 +42,8 @@ class Article(Base):
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     summary = Column(Text, nullable=True)
-    category_id = Column(Integer, ForeignKey("content_categories.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey(
+        "content_categories.id"), nullable=True)
     author = Column(String, nullable=True)
     read_time = Column(Integer, nullable=True)  # بالدقائق
     featured_image_url = Column(String, nullable=True)
@@ -51,6 +55,7 @@ class Article(Base):
     category = relationship("ContentCategory", back_populates="articles")
     bookmarks = relationship("ArticleBookmark", back_populates="article")
 
+
 class Meditation(Base):
     __tablename__ = "meditations"
 
@@ -58,7 +63,8 @@ class Meditation(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     audio_url = Column(String, nullable=False)
-    category_id = Column(Integer, ForeignKey("content_categories.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey(
+        "content_categories.id"), nullable=True)
     duration = Column(Integer, nullable=False)  # بالدقائق
     guide = Column(String, nullable=True)
     background_music_url = Column(String, nullable=True)
@@ -68,7 +74,9 @@ class Meditation(Base):
 
     # العلاقات
     category = relationship("ContentCategory", back_populates="meditations")
-    completions = relationship("MeditationCompletion", back_populates="meditation")
+    completions = relationship(
+        "MeditationCompletion", back_populates="meditation")
+
 
 class Exercise(Base):
     __tablename__ = "exercises"
@@ -77,7 +85,8 @@ class Exercise(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     instructions = Column(Text, nullable=False)
-    category_id = Column(Integer, ForeignKey("content_categories.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey(
+        "content_categories.id"), nullable=True)
     duration = Column(Integer, nullable=False)  # بالدقائق
     difficulty_level = Column(Integer, nullable=False)  # 1-5
     video_url = Column(String, nullable=True)
@@ -90,13 +99,15 @@ class Exercise(Base):
     category = relationship("ContentCategory", back_populates="exercises")
     completions = relationship("ExerciseCompletion", back_populates="exercise")
 
+
 class Program(Base):
     __tablename__ = "programs"
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    category_id = Column(Integer, ForeignKey("content_categories.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey(
+        "content_categories.id"), nullable=True)
     duration = Column(Integer, nullable=False)  # بالأيام
     difficulty_level = Column(Integer, nullable=False)  # 1-5
     image_url = Column(String, nullable=True)
@@ -108,6 +119,7 @@ class Program(Base):
     category = relationship("ContentCategory", back_populates="programs")
     enrollments = relationship("ProgramEnrollment", back_populates="program")
     modules = relationship("ProgramModule", back_populates="program")
+
 
 class ProgramModule(Base):
     __tablename__ = "program_modules"
@@ -125,6 +137,7 @@ class ProgramModule(Base):
     # العلاقات
     program = relationship("Program", back_populates="modules")
     completions = relationship("ModuleCompletion", back_populates="module")
+
 
 class SupportGroup(Base):
     __tablename__ = "support_groups"
@@ -144,6 +157,7 @@ class SupportGroup(Base):
     memberships = relationship("GroupMembership", back_populates="group")
     posts = relationship("GroupPost", back_populates="group")
 
+
 class GroupMembership(Base):
     __tablename__ = "group_memberships"
 
@@ -156,6 +170,7 @@ class GroupMembership(Base):
     # العلاقات
     group = relationship("SupportGroup", back_populates="memberships")
     user = relationship("User", back_populates="group_memberships")
+
 
 class GroupPost(Base):
     __tablename__ = "group_posts"
@@ -171,6 +186,7 @@ class GroupPost(Base):
     user = relationship("User")
     comments = relationship("GroupComment", back_populates="post")
 
+
 class GroupComment(Base):
     __tablename__ = "group_comments"
 
@@ -184,6 +200,7 @@ class GroupComment(Base):
     post = relationship("GroupPost", back_populates="comments")
     user = relationship("User")
 
+
 class ArticleBookmark(Base):
     __tablename__ = "article_bookmarks"
 
@@ -196,18 +213,21 @@ class ArticleBookmark(Base):
     user = relationship("User", back_populates="bookmarks")
     article = relationship("Article", back_populates="bookmarks")
 
+
 class MeditationCompletion(Base):
     __tablename__ = "meditation_completions"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    meditation_id = Column(Integer, ForeignKey("meditations.id"), nullable=False)
+    meditation_id = Column(Integer, ForeignKey(
+        "meditations.id"), nullable=False)
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
     rating = Column(Integer, nullable=True)  # 1-5
 
     # العلاقات
     user = relationship("User")
     meditation = relationship("Meditation", back_populates="completions")
+
 
 class ExerciseCompletion(Base):
     __tablename__ = "exercise_completions"
@@ -221,6 +241,7 @@ class ExerciseCompletion(Base):
     # العلاقات
     user = relationship("User")
     exercise = relationship("Exercise", back_populates="completions")
+
 
 class ProgramEnrollment(Base):
     __tablename__ = "program_enrollments"
@@ -236,12 +257,14 @@ class ProgramEnrollment(Base):
     user = relationship("User", back_populates="program_enrollments")
     program = relationship("Program", back_populates="enrollments")
 
+
 class ModuleCompletion(Base):
     __tablename__ = "module_completions"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    module_id = Column(Integer, ForeignKey("program_modules.id"), nullable=False)
+    module_id = Column(Integer, ForeignKey(
+        "program_modules.id"), nullable=False)
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
     notes = Column(Text, nullable=True)
 

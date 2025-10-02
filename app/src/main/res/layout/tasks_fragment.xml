@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2020 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="headerData"
+            type="com.example.android.trackr.ui.tasks.HeaderData" />
+
+        <variable
+            name="listener"
+            type="com.example.android.trackr.ui.tasks.TasksAdapter.ItemListener" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:paddingTopSystemBars="@{true}">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:paddingLeftSystemBars="@{true}"
+            app:paddingRightSystemBars="@{true}"
+            android:paddingEnd="@dimen/pane_margin"
+            android:paddingStart="@dimen/pane_margin">
+
+            <include
+                android:id="@+id/sticky_header"
+                app:headerData="@{headerData}"
+                app:listener="@{listener}"
+                layout="@layout/header_item" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tasks_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
+            tools:listitem="@layout/task_summary"
+            android:paddingStart="@dimen/pane_margin"
+            android:paddingEnd="@dimen/pane_margin" />
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="?android:attr/windowBackground"
+            app:fabAlignmentMode="end"
+            app:menu="@menu/bottom_app_bar_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/add_task"
+            app:layout_anchor="@id/bottomAppBar"
+            app:srcCompat="@drawable/ic_add" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

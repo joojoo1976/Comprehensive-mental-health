@@ -7,18 +7,23 @@ from pydantic import BaseModel, EmailStr, constr
 from app.models.user import UserRole
 
 # Base schemas
+
+
 class UserBase(BaseModel):
     email: EmailStr
     full_name: Optional[constr(min_length=1, max_length=100)] = None
     role: UserRole = UserRole.USER
 
+
 class UserCreate(UserBase):
     password: str
+
 
 class UserUpdate(BaseModel):
     full_name: Optional[constr(min_length=1, max_length=100)] = None
     is_active: Optional[bool] = None
     role: Optional[UserRole] = None
+
 
 class UserInDBBase(UserBase):
     id: int
@@ -32,11 +37,15 @@ class UserInDBBase(UserBase):
         orm_mode = True
 
 # Additional schemas for specific endpoints
+
+
 class User(UserInDBBase):
     pass
 
+
 class UserInDB(UserInDBBase):
     hashed_password: str
+
 
 class UserProfileBase(BaseModel):
     bio: Optional[str] = None
@@ -48,11 +57,14 @@ class UserProfileBase(BaseModel):
     notification_preferences: Optional[str] = None
     privacy_settings: Optional[str] = None
 
+
 class UserProfileCreate(UserProfileBase):
     pass
 
+
 class UserProfileUpdate(UserProfileBase):
     pass
+
 
 class UserProfileInDBBase(UserProfileBase):
     id: int
@@ -63,8 +75,10 @@ class UserProfileInDBBase(UserProfileBase):
     class Config:
         orm_mode = True
 
+
 class UserProfile(UserProfileInDBBase):
     pass
+
 
 class UserPreferencesBase(BaseModel):
     meditation_reminders: bool = True
@@ -77,11 +91,14 @@ class UserPreferencesBase(BaseModel):
     preferred_mood_check_in_time: str = "20:00"
     content_categories: Optional[str] = None  # JSON
 
+
 class UserPreferencesCreate(UserPreferencesBase):
     pass
 
+
 class UserPreferencesUpdate(UserPreferencesBase):
     pass
+
 
 class UserPreferencesInDBBase(UserPreferencesBase):
     id: int
@@ -92,13 +109,16 @@ class UserPreferencesInDBBase(UserPreferencesBase):
     class Config:
         orm_mode = True
 
+
 class UserPreferences(UserPreferencesInDBBase):
     pass
+
 
 class Token(BaseModel):
     access_token: str
     token_type: str
     user: User
+
 
 class TokenPayload(BaseModel):
     sub: Optional[int] = None

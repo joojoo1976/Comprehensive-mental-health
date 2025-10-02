@@ -10,9 +10,10 @@ from app import crud, schemas
 from app.core import security
 from app.core.config import settings
 from app.api import deps
-from app.utils import send_verification_email
+from app.utils import send_verification_email, send_password_reset_email
 
 router = APIRouter()
+
 
 @router.post("/login", response_model=schemas.Token)
 def login(
@@ -37,7 +38,8 @@ def login(
             detail="الحساب غير نشط",
         )
 
-    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    access_token_expires = timedelta(
+        minutes=settings.access_token_expire_minutes)
     access_token = security.create_access_token(
         user.id, expires_delta=access_token_expires
     )
@@ -46,6 +48,7 @@ def login(
         "token_type": "bearer",
         "user": schemas.User.from_orm(user)
     }
+
 
 @router.post("/register", response_model=schemas.User)
 def register(
@@ -70,6 +73,7 @@ def register(
 
     return user
 
+
 @router.post("/verify-email")
 def verify_email(
     token: str,
@@ -87,6 +91,7 @@ def verify_email(
 
     return {"msg": "تم التحقق من البريد الإلكتروني بنجاح"}
 
+
 @router.post("/password-recovery", response_model=schemas.Msg)
 def password_recovery(
     email: str,
@@ -99,9 +104,10 @@ def password_recovery(
     if user:
         password_reset_token = crud.generate_password_reset_token(user)
         send_password_reset_email(
-            email=email, email=email, token=password_reset_token
+            email=email, token=password_reset_token
         )
     return {"msg": "إذا كان البريد الإلكتروني مسجلاً، سيتم إرسال رابط لإعادة تعيين كلمة المرور"}
+
 
 @router.post("/reset-password", response_model=schemas.Msg)
 def reset_password(
@@ -113,7 +119,8 @@ def reset_password(
     إعادة تعيين كلمة المرور باستخدام الرمز
     """
     hashed_password = security.get_password_hash(new_password)
-    reset_success = crud.reset_password(db, token=token, new_password=hashed_password)
+    reset_success = crud.reset_password(
+        db, token=token, new_password=hashed_password)
     if not reset_success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

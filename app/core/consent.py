@@ -11,6 +11,7 @@ from app.core.database import Base
 from app.core.i18n.translation_manager import translator
 from app.core.geolocation import geolocation_service
 
+
 class LanguageConsent(Base):
     """نموذج موافقة المستخدم على اللغة"""
     __tablename__ = "language_consents"
@@ -19,13 +20,15 @@ class LanguageConsent(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     consent_given = Column(Boolean, default=False)
     preferred_locale = Column(String, nullable=True)
-    locale_source = Column(String, nullable=True)  # manual, browser, ip, device
+    # manual, browser, ip, device
+    locale_source = Column(String, nullable=True)
     consent_data = Column(Text, nullable=True)  # JSON
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # العلاقات
     user = relationship("User")
+
 
 class LanguageConsentManager:
     """مدير موافقة المستخدم على اللغة"""
@@ -45,7 +48,8 @@ class LanguageConsentManager:
         Returns:
             قاموس يحتوي على حالة الموافقة
         """
-        consent = db.query(LanguageConsent).filter(LanguageConsent.user_id == user_id).first()
+        consent = db.query(LanguageConsent).filter(
+            LanguageConsent.user_id == user_id).first()
 
         if consent:
             return {
@@ -63,9 +67,9 @@ class LanguageConsentManager:
             }
 
     def record_consent(self, db: Session, user_id: int, consent_given: bool,
-                      preferred_locale: Optional[str] = None,
-                      locale_source: Optional[str] = None,
-                      consent_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+                       preferred_locale: Optional[str] = None,
+                       locale_source: Optional[str] = None,
+                       consent_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         تسجيل موافقة المستخدم
 
@@ -81,7 +85,8 @@ class LanguageConsentManager:
             قاموس يحتوي على حالة الموافقة بعد التسجيل
         """
         # البحث عن سجل موافقة حالي
-        consent = db.query(LanguageConsent).filter(LanguageConsent.user_id == user_id).first()
+        consent = db.query(LanguageConsent).filter(
+            LanguageConsent.user_id == user_id).first()
 
         if not consent:
             # إنشاء سجل جديد إذا لم يكن موجودًا
@@ -92,7 +97,8 @@ class LanguageConsentManager:
         consent.consent_given = consent_given
         consent.preferred_locale = preferred_locale
         consent.locale_source = locale_source
-        consent.consent_data = json.dumps(consent_data) if consent_data else None
+        consent.consent_data = json.dumps(
+            consent_data) if consent_data else None
 
         db.commit()
         db.refresh(consent)
@@ -105,7 +111,7 @@ class LanguageConsentManager:
         }
         return response_data
 
-    def get_locale_with_consent(self, db: Session, user_id: int, request = None, ip_address: str = None) -> str:
+    def get_locale_with_consent(self, db: Session, user_id: int, request=None, ip_address: str = None) -> str:
         """
         الحصول على اللغة المناسبة للمستخدم مع مراعاة موافقته
 
@@ -157,6 +163,7 @@ class LanguageConsentManager:
             }
 
         return locales
+
 
 # إنشاء مثيل من مدير موافقة المستخدم
 consent_manager = LanguageConsentManager()

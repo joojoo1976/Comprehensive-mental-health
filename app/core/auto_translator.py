@@ -6,6 +6,7 @@ from typing import Dict, List, Optional, Any
 from app.core.i18n import translator, i18n_settings
 from app.config import settings
 
+
 class AutoTranslator:
     """مترجم آلي للمحتوى"""
 
@@ -44,8 +45,10 @@ class AutoTranslator:
             source_locale = i18n_settings.default_locale
 
         # الحصول على أسماء اللغات
-        source_lang_name = translator.get_translation(f"language_name.{source_locale}", source_locale)
-        target_lang_name = translator.get_translation(f"language_name.{target_locale}", target_locale)
+        source_lang_name = translator.get_translation(
+            f"language_name.{source_locale}", source_locale)
+        target_lang_name = translator.get_translation(
+            f"language_name.{target_locale}", target_locale)
 
         # إنشاء طلب الترجمة
         try:
@@ -90,32 +93,39 @@ class AutoTranslator:
 
         # ترجمة العناصر النصية
         if "title" in content:
-            translated_content["title"] = self.translate_text(content["title"], target_locale, source_locale)
+            translated_content["title"] = self.translate_text(
+                content["title"], target_locale, source_locale)
 
         if "description" in content:
-            translated_content["description"] = self.translate_text(content["description"], target_locale, source_locale)
+            translated_content["description"] = self.translate_text(
+                content["description"], target_locale, source_locale)
 
         if "content" in content:
-            translated_content["content"] = self.translate_text(content["content"], target_locale, source_locale)
+            translated_content["content"] = self.translate_text(
+                content["content"], target_locale, source_locale)
 
         if "summary" in content:
-            translated_content["summary"] = self.translate_text(content["summary"], target_locale, source_locale)
+            translated_content["summary"] = self.translate_text(
+                content["summary"], target_locale, source_locale)
 
         if "instructions" in content:
-            translated_content["instructions"] = self.translate_text(content["instructions"], target_locale, source_locale)
+            translated_content["instructions"] = self.translate_text(
+                content["instructions"], target_locale, source_locale)
 
         # ترجمة العناصر المتداخلة
         if "modules" in content:
             translated_content["modules"] = []
             for module in content["modules"]:
-                translated_module = self.translate_content(module, target_locale, source_locale)
+                translated_module = self.translate_content(
+                    module, target_locale, source_locale)
                 if translated_module:
                     translated_content["modules"].append(translated_module)
 
         if "exercises" in content:
             translated_content["exercises"] = []
             for exercise in content["exercises"]:
-                translated_exercise = self.translate_content(exercise, target_locale, source_locale)
+                translated_exercise = self.translate_content(
+                    exercise, target_locale, source_locale)
                 if translated_exercise:
                     translated_content["exercises"].append(translated_exercise)
 
@@ -217,8 +227,10 @@ class AutoTranslator:
             source_locale = i18n_settings.default_locale
 
         # الحصول على أسماء اللغات
-        source_lang_name = translator.get_translation(f"language_name.{source_locale}", source_locale)
-        target_lang_name = translator.get_translation(f"language_name.{target_locale}", target_locale)
+        source_lang_name = translator.get_translation(
+            f"language_name.{source_locale}", source_locale)
+        target_lang_name = translator.get_translation(
+            f"language_name.{target_locale}", target_locale)
 
         # إنشاء طلب الترجمة
         try:
@@ -239,7 +251,8 @@ class AutoTranslator:
             )
 
             # استخراج النصوص المترجمة
-            translated_texts = response.choices[0].message.content.strip().split("\n")
+            translated_texts = response.choices[0].message.content.strip().split(
+                "\n")
 
             # التأكد من أن عدد النصوص المترجمة مطابق للنصوص الأصلية
             if len(translated_texts) != len(texts):
@@ -249,6 +262,7 @@ class AutoTranslator:
         except Exception as e:
             print(f"Batch translation error: {e}")
             return [None] * len(texts)
+
 
 # إنشاء مثيل من المترجم الآلي
 auto_translator = AutoTranslator()
