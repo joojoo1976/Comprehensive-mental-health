@@ -15,4 +15,4 @@
  */
 
 include ':shared', ':app', ':app-compose'
-rootProject.name = "trackr"
+rootProject.name = "comprehensive-mental-health"

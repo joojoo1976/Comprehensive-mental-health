@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.comprehensivementalhealth"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.comprehensivementalhealth"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -27,22 +27,27 @@ android {
         }
     }
     compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-            jvmTarget = "21"
+            jvmTarget = "17"
+            apiVersion = "1.9"
+            languageVersion = "1.9"
     }
     lint {
         baseline = file("lint-baseline.xml")
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
